@@ -1,7 +1,7 @@
 const {db} = require('../database');
 
 const addTorneo = async (req, res) => {
-    console.log(req.body);
+    //console.log(req.body);
     const name = req.body.nombre_torneo
     const fecha_inicio = req.body.fecha_inicio
     const fecha_fin = req.body.fecha_fin
@@ -23,8 +23,8 @@ const addTorneo = async (req, res) => {
     }
 }
 const UpdateTorneo = async (req, res) => {
-    console.log(req.body)
-    console.log(req.params)
+    //console.log(req.body)
+    //console.log(req.params)
     const name = req.body.nombre_torneo
     const fecha_inicio = req.body.fecha_inicio
     const fecha_fin = req.body.fecha_fin
@@ -50,11 +50,11 @@ const UpdateTorneo = async (req, res) => {
 
 const DeleteTorneo = async (req, res) => {
 
-    const id_cancha = req.params.idCancha;
+    const id_torneo = req.params.idTorneo;
 
     try {
-        const result = await db.query('DELETE from canchas WHERE id_cancha = $1 RETURNING *', [
-            id_cancha
+        const result = await db.query('DELETE from torneos WHERE id_torneo = $1 RETURNING *', [
+            id_torneo
         ]);
         res.json(result.rows[0]);
     } catch (error) {
@@ -65,7 +65,7 @@ const DeleteTorneo = async (req, res) => {
 const GetAllTorneos = async (req, res) => {
     try {
         const result = await db.query('SELECT * FROM torneos where fecha_fin > CURRENT_DATE ');
-        console.log("RESULT : " + JSON.stringify(result));
+        //console.log("RESULT : " + JSON.stringify(result));
         res.json(result.rows);
     } catch (error) {
         console.log(error.message);
@@ -74,11 +74,11 @@ const GetAllTorneos = async (req, res) => {
 
 const GetTorneoById = async (req, res) => {
     const id = req.params.idTorneo;
-    console.log(JSON.stringify(id));
+    //console.log(JSON.stringify(id));
     try {
         const result = await db.query('SELECT * FROM torneos WHERE id_torneo = $1 ' , 
         [id]);
-        console.log("RESULT : " + result);
+        //console.log("RESULT : " + result);
         res.json(result.rows);
     } catch (error) {
         console.log(error.message);

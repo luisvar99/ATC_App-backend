@@ -3,6 +3,7 @@ const cors = require('cors');
 const canchaRoute = require('./Routes/Canchas')
 const AuthRoute = require('./Routes/Auth')
 const TorneosRoute = require('./Routes/Torneos')
+const SubTorneosRoute = require('./Routes/SubTorneos')
 //const {sequelize}= require('./models/index');
 const session = require('express-session')
 require('dotenv').config();
@@ -28,6 +29,7 @@ app.use(session({
 app.use(canchaRoute)
 app.use(AuthRoute)
 app.use(TorneosRoute)
+app.use(SubTorneosRoute)
 
 app.get('/', (req, res) => {
     res.json("Hello")
