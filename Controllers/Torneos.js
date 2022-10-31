@@ -74,11 +74,11 @@ const GetAllTorneos = async (req, res) => {
 
 const GetTorneoById = async (req, res) => {
     const id = req.params.idTorneo;
-    //console.log(JSON.stringify(id));
+    //console.log(id);
     try {
         const result = await db.query('SELECT * FROM torneos WHERE id_torneo = $1 ' , 
         [id]);
-        //console.log("RESULT : " + result);
+        //console.log("RESULT : " + result.rows);
         res.json(result.rows);
     } catch (error) {
         console.log(error.message);

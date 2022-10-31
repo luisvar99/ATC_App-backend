@@ -10,8 +10,13 @@ const session = require('express-session')
 require('dotenv').config();
 
 const app = express();
+const corsOptions ={
+    origin: ['http://localhost:3000', 'https://63605a6056950d0dc441a85d--eloquent-kataifi-0580d4.netlify.app'],
+    credentials:true,            //access-control-allow-credentials:true
+    optionSuccessStatus:200
+}
 
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false}));
 app.use(session({

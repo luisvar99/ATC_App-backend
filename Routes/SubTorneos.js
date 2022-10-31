@@ -1,7 +1,8 @@
 const {Router} = require('express')
 const {addSubTorneo, GetSubTorneoById, 
     UpdateSubTorneo, DeleteSubTorneo, GetSubTorneosByTorneoId,
-    GetSubTorneosParticipants, GetNumberOfParticipants, GetSingleSubTorneo
+    GetSubTorneosParticipants, GetNumberOfParticipants, GetSingleSubTorneo,
+    DeleteSubTorneoParticipant
 } = require('../Controllers/Subtorneos')
 
 const router = new Router();
@@ -19,5 +20,6 @@ router.post('/api/addSubTorneo', addSubTorneo)
 router.put('/api/editSubTorneo/:idSubTorneo', UpdateSubTorneo)
 
 router.delete('/api/deleteSubTorneo/:idSubTorneo', DeleteSubTorneo)
+router.delete('/api/deleteSubTorneoParticipant/user=:user_id/:idSubTorneo', DeleteSubTorneoParticipant)
 
 module.exports = router;
