@@ -1,5 +1,6 @@
 const {db} = require('../database');
-const bcrypt = require('bcrypt');
+//const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 
 const Login = async (req, res) => {
