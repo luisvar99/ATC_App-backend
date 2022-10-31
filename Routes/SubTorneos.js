@@ -2,7 +2,7 @@ const {Router} = require('express')
 const {addSubTorneo, GetSubTorneoById, 
     UpdateSubTorneo, DeleteSubTorneo, GetSubTorneosByTorneoId,
     GetSubTorneosParticipants, GetNumberOfParticipants, GetSingleSubTorneo
-} = require('../Controllers/SubTorneos')
+} = require('../Controllers/Subtorneos')
 
 const router = new Router();
 
