@@ -4,6 +4,7 @@ const canchaRoute = require('./Routes/Canchas')
 const AuthRoute = require('./Routes/Auth')
 const TorneosRoute = require('./Routes/Torneos')
 const SubTorneosRoute = require('./Routes/SubTorneos')
+const TorneoParticipantesRoute = require('./Routes/ParticipantesTorneos')
 //const {sequelize}= require('./models/index');
 const session = require('express-session')
 require('dotenv').config();
@@ -30,12 +31,13 @@ app.use(canchaRoute)
 app.use(AuthRoute)
 app.use(TorneosRoute)
 app.use(SubTorneosRoute)
+app.use(TorneoParticipantesRoute)
 
 app.get('/', (req, res) => {
     res.json("Hello")
 })
 
-const PORT = 4000
+const PORT = process.env.PORT || 4000
 
 app.listen(PORT, (req, res) => {
     console.log(`Listening on port ${PORT}`);

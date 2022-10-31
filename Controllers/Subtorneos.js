@@ -73,7 +73,7 @@ const GetSubTorneoById = async (req, res) => {
 
 const GetSubTorneosByTorneoId = async (req, res) => {
     const id = (req.params.idTorneo);
-    console.log(id);
+    //console.log(id);
     try {
         const result = await db.query('SELECT * FROM subtorneos WHERE id_torneo = $1 ' , 
         [id]);
@@ -83,10 +83,54 @@ const GetSubTorneosByTorneoId = async (req, res) => {
         console.log(error.message);
     }
 }
+const GetSingleSubTorneo = async (req, res) => {
+    const id = req.params.idSubTorneo;
+    console.log("GetSingleSubTorneo " + id);
+    try {
+        const result = await db.query('SELECT * FROM subtorneos WHERE id_subtorneo = $1 ' , 
+        [id]);
+        console.log("RESULT : " + JSON.stringify(result));
+        res.json(result.rows);
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const GetSubTorneosParticipants = async (req, res) => {
+    const id = (req.params.idSubTorneo);
+    //console.log(id);
+    try {
+        const result = await db.query(`SELECT st.nombre, tor.nombre_torneo, u.username, u.id
+        FROM subtorneos st
+        JOIN participantestorneo pt on pt.id_subtorneo = st.id_subtorneo
+        JOIN torneos tor on tor.id_torneo = st.id_torneo
+        JOIN users u on u.id = pt.user_id
+        WHERE st.id_subtorneo =  $1` , 
+        [id]);
+        //console.log("RESULT : " + JSON.stringify(result));
+        res.json(result.rows);
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+const GetNumberOfParticipants = async (req, res) => {
+    const id = (req.params.idSubTorneo);
+    //console.log("GetNumberOfParticipants: " + id);
+    try {
+        const result = await db.query("SELECT COUNT(*) number_of_participants FROM participantestorneo WHERE id_subtorneo = $1" , 
+        [id]);
+        //console.log("RESULT : " + JSON.stringify(result));
+        res.json(result.rows);
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 
 
 module.exports = {
     addSubTorneo, 
     GetSubTorneosByTorneoId, UpdateSubTorneo, 
-    DeleteSubTorneo, GetSubTorneoById
+    DeleteSubTorneo, GetSubTorneoById, GetSubTorneosParticipants,
+    GetNumberOfParticipants, GetSingleSubTorneo
 }

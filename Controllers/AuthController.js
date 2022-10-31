@@ -16,10 +16,10 @@ const Login = async (req, res) => {
                 username:req.body.username,
                 id: potencialLogin.rows[0].id
             }
-            res.json({loggedIn: true, username: req.body.username})
-            console.log("Segundo Session");
+            res.json({loggedIn: true, username: req.body.username, id:potencialLogin.rows[0].id})
+            //console.log("Segundo Session");
             console.log(req.session);
-            console.log("Good Login!");
+            //console.log("Good Login!");
         }else{
             res.json({loggedIn: false, status: "wrong username or password"})
             console.log("Not good");
