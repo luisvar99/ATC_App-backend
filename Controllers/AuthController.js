@@ -4,8 +4,7 @@ const bcrypt = require('bcryptjs');
 
 
 const Login = async (req, res) => {
-    console.log("Primer Session");
-    console.log(req.session);
+    //console.log(req.session);
     
     const potencialLogin = await db.query("SELECT id, username, passhash FROM users WHERE username=$1", 
     [req.body.username])
@@ -38,13 +37,14 @@ const SignUp = async (req, res) => {
         const hashedPass = await bcrypt.hash(req.body.password, 10);
         const newUserQuery = await db.query("INSERT INTO users (username, passhash) VALUES($1,$2) RETURNING id, username",
         [req.body.username, hashedPass]);
-
+        
+        console.log(newUserQuery.rows[0]);
         req.session.user = {
             username: req.body.username,
             id: newUserQuery.rows[0].id
         }
-
-        res.json({loggedIn:true, username: req.body.username})
+        console.log(newUserQuery.rows[0]);
+        res.json({loggedIn:true, username: req.body.username, id:newUserQuery.rows[0].id})
 
     }else{
         res.json({loggedIn: false, status: "Username taken"});
