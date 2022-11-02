@@ -7,7 +7,7 @@ const db = new Pool ({
     user: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
-    max: 5
+    max: 10
     
 /*     ssl: {
         rejectUnauthorized: false,
