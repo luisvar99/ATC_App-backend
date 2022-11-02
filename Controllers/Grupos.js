@@ -1,16 +1,38 @@
 const {db} = require('../database');
 
 const addGrupo = async (req, res) => {
-    const idSubTorneo = req.params.idSubTorneo 
+    const idSubTorneo = req.body.idSubTorneo 
+    const nombre_grupo = req.body.nombre_grupo 
+    const numberOfGroups = req.params.numberOfGroups 
 
+    const response = [];
+    //console.log(idSubTorneo + ' ' + numberOfGroups);
     try {
-        const result = await db.query('INSERT INTO subtorneogrupos (id_subtorneo, id_grupo) VALUES ($1,$2) RETURNING *', [
-            idSubTorneo
-        ]);
-        res.json(result.rows[0]);
+        for (let index = 0; index < numberOfGroups; index++) {
+            const result = await db.query(`INSERT INTO subtorneogrupos (id_subtorneo, nombre_grupo) VALUES ($1, 'Grupo ${index+1}' ) RETURNING *`, [
+                idSubTorneo
+            ]);
+            response.push(result.rows[0]);
+        }
+        res.json({success:true, result: response});
     } catch (error) {
+        res.json({success: 'Failed', error: error.message});
         console.log(error.message);
-    }
+    }        
+}
+const addGrupoMember = async (req, res) => {
+    const id_grupo = req.body.id_grupo;
+    const user_id = req.body.user_id;
+    //console.log(idSubTorneo + ' ' + numberOfGroups);
+    try {
+            const result = await db.query('INSERT INTO participantesgrupo (id_grupo, user_id) VALUES ($1,$2) RETURNING *', [
+                id_grupo, user_id
+            ]);
+        res.json({success:true, result: result});
+    } catch (error) {
+        res.json({success: 'Failed', error: error.message});
+        console.log(error.message);
+    }        
 }
 const UpdateGrupo = async (req, res) => {
     
@@ -46,20 +68,39 @@ const DeleteGrupo = async (req, res) => {
 const GetAllGrupos = async (req, res) => {
     try {
         const result = await db.query('SELECT * FROM subtorneogrupos');
-        console.log("RESULT : " + JSON.stringify(result));
+        //console.log("RESULT : " + JSON.stringify(result));
         res.json(result.rows);
     } catch (error) {
         console.log(error.message);
     }
 }
 
-const GetGrupoById = async (req, res) => {
-    const id = req.params.idGrupo;
-    console.log(JSON.stringify(id));
+const getSubtorneoGrupos = async (req, res) => {
+    const idSubTorneo = req.params.idSubtorneo;
+    console.log(idSubTorneo);
     try {
-        const result = await db.query('SELECT * FROM subtorneogrupos WHERE id_Grupo = $1 ' , 
-        [id]);
-        console.log("RESULT : " + result);
+        const result = await db.query('SELECT * FROM subtorneogrupos WHERE id_subtorneo = $1 ' , 
+        [idSubTorneo]);
+        //console.log("RESULT : " + result);
+        res.json(result.rows);
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const GetGruposMembers = async (req, res) => {
+    const idSubTorneo = req.params.idSubtorneo;
+    try {
+        const result = await db.query(`select u.username, subt.nombre, tor.nombre_torneo, subgrupo.nombre_grupo
+        from users u
+        JOIN participantesgrupo part on part.user_id = u.id
+        JOIN subtorneogrupos subgrupo on subgrupo.id_grupo = part.id_grupo
+        JOIN subtorneos subt on subt.id_subtorneo = subgrupo.id_subtorneo
+        JOIN torneos tor on tor.id_torneo = subt.id_torneo
+        WHERE subgrupo.id_subtorneo = $1
+        ORDER BY subgrupo.nombre_grupo`  , 
+        [idSubTorneo]);
+        //console.log("RESULT : " + result);
         res.json(result.rows);
     } catch (error) {
         console.log(error.message);
@@ -69,6 +110,6 @@ const GetGrupoById = async (req, res) => {
 
 module.exports = {
     addGrupo, GetAllGrupos, 
-    GetGrupoById, UpdateGrupo, 
-    DeleteGrupo
+    getSubtorneoGrupos, UpdateGrupo, 
+    DeleteGrupo, addGrupoMember, GetGruposMembers
 }
