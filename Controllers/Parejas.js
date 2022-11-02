@@ -1,6 +1,6 @@
 const {db} = require('../database');
 
-const addGrupo = async (req, res) => {
+const addSubtorneoPareja = async (req, res) => {
     const idSubTorneo = req.body.idSubTorneo 
     const nombre_grupo = req.body.nombre_grupo 
     const numberOfGroups = req.params.numberOfGroups 
@@ -104,13 +104,12 @@ const GetGruposMembers = async (req, res) => {
         res.json(result.rows);
     } catch (error) {
         console.log(error.message);
-    }finally{
     }
 }
 
 
 module.exports = {
-    addGrupo, GetAllGrupos, 
+    addSubtorneoPareja, GetAllGrupos, 
     getSubtorneoGrupos, UpdateGrupo, 
     DeleteGrupo, addGrupoMember, GetGruposMembers
 }

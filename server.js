@@ -6,6 +6,7 @@ const TorneosRoute = require('./Routes/Torneos')
 const SubTorneosRoute = require('./Routes/SubTorneos')
 const TorneoParticipantesRoute = require('./Routes/ParticipantesTorneos')
 const GruposRoute = require('./Routes/Grupos')
+const UsersRoute = require('./Routes/Users')
 //const {sequelize}= require('./models/index');
 const session = require('express-session')
 require('dotenv').config();
@@ -40,6 +41,7 @@ app.use(TorneosRoute)
 app.use(SubTorneosRoute)
 app.use(TorneoParticipantesRoute)
 app.use(GruposRoute)
+app.use(UsersRoute)
 
 app.get('/', (req, res) => {
     res.json("Hello")
