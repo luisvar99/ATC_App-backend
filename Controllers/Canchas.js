@@ -5,6 +5,7 @@ const addCancha = async (req, res) => {
     const name = req.body.nombre_cancha 
     const category = req.body.id_categoriacancha
     const status = req.body.estatus_cancha
+    
 
     try {
         const result = await db.query('INSERT INTO canchas (nombre_cancha, id_categoriacancha,estatus_cancha) VALUES ($1,$2,$3) RETURNING *', [

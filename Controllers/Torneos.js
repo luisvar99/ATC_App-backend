@@ -9,10 +9,12 @@ const addTorneo = async (req, res) => {
     const fecha_fin_inscripcion= req.body.fecha_fin_inscripcion
     const id_categoria = req.body.id_categoria
     const descripcion = req.body.descripcion
+    const modalidad = req.body.modalidad
+    
 
     try {
-        const result = await db.query('INSERT INTO torneos(nombre_torneo, fecha_inicio, fecha_fin, fecha_inicio_inscripcion, fecha_fin_inscripcion, id_categoria, descripcion) VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING *', [
-            name,  fecha_inicio, fecha_fin, fecha_inicio_inscripcion,fecha_fin_inscripcion, id_categoria, descripcion
+        const result = await db.query('INSERT INTO torneos(nombre_torneo, fecha_inicio, fecha_fin, fecha_inicio_inscripcion, fecha_fin_inscripcion, id_categoria, descripcion, modalidad) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *', [
+            name,  fecha_inicio, fecha_fin, fecha_inicio_inscripcion,fecha_fin_inscripcion, id_categoria, descripcion, modalidad
         ]);
         //res.json(result.rows);
         res.json({success: true});	
