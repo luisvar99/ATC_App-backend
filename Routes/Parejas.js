@@ -1,19 +1,19 @@
 const {Router} = require('express')
-const {addSubtorneoPareja, GetAllGrupos, getSubtorneoGrupos, 
-    UpdateGrupo, DeleteGrupo, addGrupoMember, GetGruposMembers
+const {addSubtorneoPareja, GetAllParejas, getSubtorneoParejas, 
+    UpdatePareja, DeletePareja, addParejaMember, GetParejasMembers
 } = require('../Controllers/Parejas')
 
 const router = new Router();
 
-router.get('/api/getAllGrupos', GetAllGrupos)
-router.get('/api/getSubtorneoGrupos/:idSubtorneo', getSubtorneoGrupos)
-router.get('/api/getGruposMembers/:idSubtorneo', GetGruposMembers)
+router.get('/api/getAllParejas', GetAllParejas)
+router.get('/api/getSubtorneoParejas/:idSubtorneo', getSubtorneoParejas)
+router.get('/api/getParejasMembers/:idSubtorneo', GetParejasMembers)
 
 router.post('/api/addSubtorneoPareja', addSubtorneoPareja)
-router.post('/api/addGrupo/idsubtorneo=:idSubtorneo/numberOfGroups=:numberOfGroups', addGrupo)
+//router.post('/api/addPareja/idsubtorneo=:idSubtorneo/numberOfGroups=:numberOfGroups', addPareja)
 
-router.put('/api/editGrupo/:idGrupo', UpdateGrupo)
+router.put('/api/editPareja/:idPareja', UpdatePareja)
 
-router.delete('/api/deleteGrupo/:idGrupo', DeleteGrupo)
+router.delete('/api/deletePareja/:idPareja', DeletePareja)
 
 module.exports = router;

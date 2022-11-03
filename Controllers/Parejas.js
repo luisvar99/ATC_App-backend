@@ -1,32 +1,28 @@
 const {db} = require('../database');
 
 const addSubtorneoPareja = async (req, res) => {
-    const idSubTorneo = req.body.idSubTorneo 
-    const nombre_grupo = req.body.nombre_grupo 
-    const numberOfGroups = req.params.numberOfGroups 
+    const idSubTorneo = req.body.id_subtorneo 
+    const myId = req.body.myId 
+    const myParejaId = req.body.myParejaId 
 
-    const response = [];
     //console.log(idSubTorneo + ' ' + numberOfGroups);
     try {
-        for (let index = 0; index < numberOfGroups; index++) {
-            const result = await db.query(`INSERT INTO subtorneogrupos (id_subtorneo, nombre_grupo) VALUES ($1, 'Grupo ${index+1}' ) RETURNING *`, [
-                idSubTorneo
+            const result = await db.query(`INSERT INTO parejas (id_user_one, id_user_two, id_subtorneo) VALUES ($1, $2, $3 ) RETURNING *`, [
+                myId, myParejaId, idSubTorneo
             ]);
-            response.push(result.rows[0]);
-        }
-        res.json({success:true, result: response});
+        res.json({message:"Pareja inscrita", result:result.rows});
     } catch (error) {
         res.json({success: 'Failed', error: error.message});
         console.log(error.message);
     }        
 }
-const addGrupoMember = async (req, res) => {
-    const id_grupo = req.body.id_grupo;
+const addParejaMember = async (req, res) => {
+    const id_Pareja = req.body.id_Pareja;
     const user_id = req.body.user_id;
     //console.log(idSubTorneo + ' ' + numberOfGroups);
     try {
-            const result = await db.query('INSERT INTO participantesgrupo (id_grupo, user_id) VALUES ($1,$2) RETURNING *', [
-                id_grupo, user_id
+            const result = await db.query('INSERT INTO participantesPareja (id_Pareja, user_id) VALUES ($1,$2) RETURNING *', [
+                id_Pareja, user_id
             ]);
         res.json({success:true, result: result});
     } catch (error) {
@@ -34,16 +30,16 @@ const addGrupoMember = async (req, res) => {
         console.log(error.message);
     }        
 }
-const UpdateGrupo = async (req, res) => {
+const UpdatePareja = async (req, res) => {
     
-    const name = req.body.nombre_Grupo;
-    const category = req.body.id_categoriaGrupo;
-    const status = req.body.estatus_Grupo;
-    const id_Grupo = req.params.idGrupo;
+    const name = req.body.nombre_Pareja;
+    const category = req.body.id_categoriaPareja;
+    const status = req.body.estatus_Pareja;
+    const id_Pareja = req.params.idPareja;
 
     try {
-        const result = await db.query('UPDATE subtorneogrupos set nombre_Grupo=$1, id_categoriaGrupo=$2, estatus_Grupo=$3 WHERE id_Grupo = $4 RETURNING *', [
-            name,  category, status, id_Grupo
+        const result = await db.query('UPDATE subtorneoParejas set nombre_Pareja=$1, id_categoriaPareja=$2, estatus_Pareja=$3 WHERE id_Pareja = $4 RETURNING *', [
+            name,  category, status, id_Pareja
         ]);
         res.json(result.rows);
     } catch (error) {
@@ -51,13 +47,13 @@ const UpdateGrupo = async (req, res) => {
     }
 }
 
-const DeleteGrupo = async (req, res) => {
+const DeletePareja = async (req, res) => {
 
-    const id_Grupo = req.params.idGrupo;
+    const id_Pareja = req.params.idPareja;
 
     try {
-        const result = await db.query('DELETE from subtorneogrupos WHERE id_Grupo = $1 RETURNING *', [
-            id_Grupo
+        const result = await db.query('DELETE from subtorneoParejas WHERE id_Pareja = $1 RETURNING *', [
+            id_Pareja
         ]);
         res.json(result.rows[0]);
     } catch (error) {
@@ -65,9 +61,9 @@ const DeleteGrupo = async (req, res) => {
     }
 }
 
-const GetAllGrupos = async (req, res) => {
+const GetAllParejas = async (req, res) => {
     try {
-        const result = await db.query('SELECT * FROM subtorneogrupos');
+        const result = await db.query('SELECT * FROM subtorneoParejas');
         //console.log("RESULT : " + JSON.stringify(result));
         res.json(result.rows);
     } catch (error) {
@@ -75,11 +71,13 @@ const GetAllGrupos = async (req, res) => {
     }
 }
 
-const getSubtorneoGrupos = async (req, res) => {
+const getSubtorneoParejas = async (req, res) => {
     const idSubTorneo = req.params.idSubtorneo;
     console.log(idSubTorneo);
     try {
-        const result = await db.query('SELECT * FROM subtorneogrupos WHERE id_subtorneo = $1 ' , 
+        const result = await db.query(`SELECT u.username, st.nombre, p.id_pareja from users u
+        JOIN parejas p on p.id_user_one = u.id or p.id_user_two = u.id
+        JOIN subtorneos st on st.id_subtorneo = p.id_subtorneo WHERE p.id_subtorneo = $1 ` , 
         [idSubTorneo]);
         //console.log("RESULT : " + result);
         res.json(result.rows);
@@ -88,17 +86,17 @@ const getSubtorneoGrupos = async (req, res) => {
     }
 }
 
-const GetGruposMembers = async (req, res) => {
+const GetParejasMembers = async (req, res) => {
     const idSubTorneo = req.params.idSubtorneo;
     try {
-        const result = await db.query(`select u.username, subt.nombre, tor.nombre_torneo, subgrupo.nombre_grupo
+        const result = await db.query(`select u.username, subt.nombre, tor.nombre_torneo, subPareja.nombre_Pareja
         from users u
-        JOIN participantesgrupo part on part.user_id = u.id
-        JOIN subtorneogrupos subgrupo on subgrupo.id_grupo = part.id_grupo
-        JOIN subtorneos subt on subt.id_subtorneo = subgrupo.id_subtorneo
+        JOIN participantesPareja part on part.user_id = u.id
+        JOIN subtorneoParejas subPareja on subPareja.id_Pareja = part.id_Pareja
+        JOIN subtorneos subt on subt.id_subtorneo = subPareja.id_subtorneo
         JOIN torneos tor on tor.id_torneo = subt.id_torneo
-        WHERE subgrupo.id_subtorneo = $1
-        ORDER BY subgrupo.nombre_grupo`  , 
+        WHERE subPareja.id_subtorneo = $1
+        ORDER BY subPareja.nombre_Pareja`  , 
         [idSubTorneo]);
         //console.log("RESULT : " + result);
         res.json(result.rows);
@@ -109,7 +107,7 @@ const GetGruposMembers = async (req, res) => {
 
 
 module.exports = {
-    addSubtorneoPareja, GetAllGrupos, 
-    getSubtorneoGrupos, UpdateGrupo, 
-    DeleteGrupo, addGrupoMember, GetGruposMembers
+    addSubtorneoPareja, GetAllParejas, 
+    getSubtorneoParejas, UpdatePareja, 
+    DeletePareja, addParejaMember, GetParejasMembers
 }
