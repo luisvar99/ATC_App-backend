@@ -49,7 +49,7 @@ const DeleteCancha = async (req, res) => {
 
 const GetAllCanchas = async (req, res) => {
     try {
-        const result = await db.query('SELECT * FROM canchas');
+        const result = await db.query('SELECT * FROM canchas order by nombre_cancha');
         console.log("RESULT : " + JSON.stringify(result));
         res.json(result.rows);
     } catch (error) {
