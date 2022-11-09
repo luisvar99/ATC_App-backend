@@ -10,6 +10,7 @@ const addSubtorneoPareja = async (req, res) => {
             const result = await db.query(`INSERT INTO parejas (id_user_one, id_user_two, id_subtorneo) VALUES ($1, $2, $3 ) RETURNING *`, [
                 myId, myParejaId, idSubTorneo
             ]);
+            
         res.json({message:"Pareja inscrita", result:result.rows});
     } catch (error) {
         res.json({success: 'Failed', error: error.message});
@@ -75,7 +76,7 @@ const getSubtorneoParejas = async (req, res) => {
     const idSubTorneo = req.params.idSubtorneo;
     console.log(idSubTorneo);
     try {
-        const result = await db.query(`SELECT u.username, st.nombre, p.id_pareja from users u
+        const result = await db.query(`SELECT u.id, u.username, st.nombre, p.id_pareja from users u
         JOIN parejas p on p.id_user_one = u.id or p.id_user_two = u.id
         JOIN subtorneos st on st.id_subtorneo = p.id_subtorneo WHERE p.id_subtorneo = $1 ` , 
         [idSubTorneo]);

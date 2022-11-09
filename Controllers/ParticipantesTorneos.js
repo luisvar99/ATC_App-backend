@@ -13,13 +13,15 @@ const addParticipant = async (req, res) => {
     try {
         if(modalidad==="Dobles"){
             const doblesResult = []
+
             for (let index = 0; index < 2; index++) {
                 const result = await db.query('INSERT INTO participantestorneo (id_subtorneo, user_id) VALUES ($1,$2) RETURNING *', [
                     id_subtorneo,  user_id
                 ]);
-                console.log("Vuelta " + index+1 + " id_subtorneo: " + user_id);
+                
+                console.log("Vuelta " + index+1 + " UserId: " + user_id);
                 user_id = myParejaId;
-                console.log("Vuelta " + index+1 + " id_subtorneo: " + user_id);
+                console.log("Vuelta " + index+1 + " UserId: " + user_id);
                 doblesResult.push(result.rows)
             }
             res.json({message: "Exito", result: doblesResult});

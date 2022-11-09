@@ -8,6 +8,8 @@ const TorneoParticipantesRoute = require('./Routes/ParticipantesTorneos')
 const GruposRoute = require('./Routes/Grupos')
 const UsersRoute = require('./Routes/Users')
 const ParejasRoute = require('./Routes/Parejas')
+const HorariosRoute = require('./Routes/Horarios')
+const ReservacionesRoute = require('./Routes/Reservaciones')
 const session = require('express-session')
 require('dotenv').config();
 
@@ -43,6 +45,8 @@ app.use(TorneoParticipantesRoute)
 app.use(GruposRoute)
 app.use(UsersRoute)
 app.use(ParejasRoute)
+app.use(HorariosRoute)
+app.use(ReservacionesRoute)
 
 app.get('/', (req, res) => {
     res.json("Hello")
