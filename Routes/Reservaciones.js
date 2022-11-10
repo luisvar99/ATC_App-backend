@@ -1,5 +1,5 @@
 const {Router} = require('express')
-const {addReservacion, GetCanchaReservaciones, GetReservacionById, 
+const {addReservacion, GetCanchaReservaciones, GetReservaDetails, 
     UpdateReservacion, DeleteReservacion
 } = require('../Controllers/Reservaciones')
 
@@ -8,7 +8,8 @@ const router = new Router();
 router.post('/api/addHorario', addReservacion)
 
 router.get('/api/GetCanchaReservaciones/:idCancha', GetCanchaReservaciones)
-router.get('/api/getSingleHorario/:idHorario', GetReservacionById)
+router.get('/api/GetReservaDetails/:id_horario', GetReservaDetails)
+//router.get('/api/getSingleHorario/:idHorario', GetReservacionById)
 
 router.put('/api/editHorario/:idHorario', UpdateReservacion)
 

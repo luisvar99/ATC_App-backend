@@ -52,7 +52,11 @@ const GetCanchaReservaciones = async (req, res) => {
     const idCancha = req.params.idCancha
 
     try {
-        const result = await db.query('SELECT * FROM reserva where id_cancha = $1' ,
+        const result = await db.query(`SELECT u.id, u.username, h.inicio, h.fin, h.id_horario 
+        from users u
+        JOIN reserva r on r.id_socio = u.id
+        JOIN horarioscancha h on h.id_horario = r.id_horario
+        WHERE id_cancha = $1` ,
         [idCancha]);
         //console.log("RESULT : " + JSON.stringify(result));
         res.json(result.rows);
@@ -61,12 +65,16 @@ const GetCanchaReservaciones = async (req, res) => {
     }
 }
 
-const GetReservacionById = async (req, res) => {
-    const id = req.params.idReservacion;
-    console.log(JSON.stringify(id));
+const GetReservaDetails = async (req, res) => {
+    const idReserva = req.params.id_horario;
+    /*console.log(JSON.stringify(id));*/    
     try {
-        const result = await db.query('SELECT * FROM reserva WHERE id_Reservacion = $1 ' , 
-        [id]);
+        const result = await db.query(`SELECT u.id, u.username, h.inicio, h.fin, h.id_horario 
+        from users u
+        JOIN reserva r on r.id_socio = u.id
+        JOIN horarioscancha h on h.id_horario = r.id_horario
+        WHERE r.id_horario = $1` ,
+        [idReserva]);
         console.log("RESULT : " + result);
         res.json(result.rows);
     } catch (error) {
@@ -77,6 +85,6 @@ const GetReservacionById = async (req, res) => {
 
 module.exports = {
     addReservacion, GetCanchaReservaciones, 
-    GetReservacionById, UpdateReservacion, 
+    GetReservaDetails, UpdateReservacion, 
     DeleteReservacion
 }
