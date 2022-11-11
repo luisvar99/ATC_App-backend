@@ -14,6 +14,6 @@ router.post('/api/addGrupoMember', addGrupoMember)
 
 router.put('/api/editGrupo/:idGrupo', UpdateGrupo)
 
-router.delete('/api/deleteGrupo/:idGrupo', DeleteGrupo)
+router.delete('/api/deleteGrupo/idGrupo=:idGrupo', DeleteGrupo)
 
 module.exports = router;
