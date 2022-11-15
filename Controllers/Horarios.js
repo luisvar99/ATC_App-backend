@@ -59,11 +59,11 @@ const GetAllHorarios = async (req, res) => {
 
 const GetHorarioById = async (req, res) => {
     const id = req.params.idHorario;
-    console.log(JSON.stringify(id));
+    console.log("ID GetHorarioById " + id);
     try {
         const result = await db.query('SELECT * FROM horarioscancha WHERE id_Horario = $1 ' , 
         [id]);
-        console.log("RESULT : " + result);
+        console.log("RESULT GetHorarioById: " + result);
         res.json(result.rows);
     } catch (error) {
         console.log(error.message);

@@ -1,15 +1,18 @@
 const {db} = require('../database');
 
 const addReservacion = async (req, res) => {
-    
-    const name = req.body.nombre_Reservacion 
-    const category = req.body.id_categoriaReservacion
-    const status = req.body.estatus_Reservacion
+    console.log("Creando reservacion");
+    const idCancha = req.body.idCancha 
+    const idHorario = req.body.idHorario
+    const idSocio = req.body.idSocio
+    const fecha = req.body.fecha
+    const id_inv_uno = req.body.id_inv_uno
+    const id_inv_dos = req.body.id_inv_dos
     
 
     try {
-        const result = await db.query('INSERT INTO reserva (id_cancha, id_horario, id_socio, fecha) VALUES ($1,$2,$3, $4) RETURNING *', [
-            name,  category, status
+        const result = await db.query('INSERT INTO reserva (id_cancha, id_horario, id_socio, fecha, id_invitado_uno, id_invitado_dos) VALUES ($1,$2,$3, $4, $5, $6) RETURNING *', [
+            idCancha,  idHorario, idSocio, fecha, id_inv_uno, id_inv_dos
         ]);
         res.json(result.rows[0]);
     } catch (error) {
@@ -52,7 +55,7 @@ const GetCanchaReservaciones = async (req, res) => {
     const idCancha = req.params.idCancha
 
     try {
-        const result = await db.query(`SELECT u.id, u.username, h.inicio, h.fin, h.id_horario 
+        const result = await db.query(`SELECT u.id, u.username, h.inicio, h.fin, h.hora_inicio, h.id_horario, r.fecha
         from users u
         JOIN reserva r on r.id_socio = u.id
         JOIN horarioscancha h on h.id_horario = r.id_horario

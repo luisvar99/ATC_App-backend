@@ -5,7 +5,7 @@ const {addReservacion, GetCanchaReservaciones, GetReservaDetails,
 
 const router = new Router();
 
-router.post('/api/addHorario', addReservacion)
+router.post('/api/createReservation', addReservacion)
 
 router.get('/api/GetCanchaReservaciones/:idCancha', GetCanchaReservaciones)
 router.get('/api/GetReservaDetails/:id_horario', GetReservaDetails)
