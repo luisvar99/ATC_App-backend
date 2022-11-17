@@ -13,6 +13,6 @@ router.get('/api/GetReservaDetails/:idReserva', GetReservaDetails)
 
 router.put('/api/editHorario/:idHorario', UpdateReservacion)
 
-router.delete('/api/deleteHorario/:idHorario', DeleteReservacion)
+router.delete('/api/deleteReserva/:idReservacion', DeleteReservacion)
 
 module.exports = router;

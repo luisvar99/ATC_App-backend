@@ -41,12 +41,13 @@ const DeleteReservacion = async (req, res) => {
     const id_Reservacion = req.params.idReservacion;
 
     try {
-        const result = await db.query('DELETE from reserva WHERE id_Reservacion = $1 RETURNING *', [
+        const result = await db.query('DELETE from reserva WHERE id_reserva = $1 RETURNING *', [
             id_Reservacion
         ]);
-        res.json(result.rows[0]);
+        res.json({Message: `Eliminada la Reserva Nro ${id_Reservacion}`});
     } catch (error) {
         console.log(error.message);
+        res.json({Message: `Error: ${error.message}`});
     }
 }
 
@@ -74,7 +75,7 @@ const GetReservaOwner = async (req, res) => {
     const idReserva = req.params.id_horario;
     /*console.log(JSON.stringify(id));*/    
     try {
-        const result = await db.query(`SELECT u.id, u.username, u.nombres, u.apellidos, h.inicio, h.fin, h.id_horario, r.id_reserva, r.id_cancha
+        const result = await db.query(`SELECT u.accion, u.id, u.username, u.nombres, u.apellidos, h.inicio, h.fin, h.id_horario, r.id_reserva, r.id_cancha, r.fecha
         from users u
         JOIN reserva r on r.id_socio = u.id
         JOIN horarioscancha h on h.id_horario = r.id_horario
