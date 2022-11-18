@@ -6,8 +6,10 @@ const {addUser, GetAllUsers, GetUserById,
 const router = new Router();
 
 router.post('/api/addUser', addUser)
+
 router.get('/api/getAllUsers', GetAllUsers)
 router.get('/api/getSingleUser/:idUser', GetUserById)
+
 router.put('/api/editUser/:idUser', UpdateUser)
 router.delete('/api/deleteUser/:idUser', DeleteUser)
 

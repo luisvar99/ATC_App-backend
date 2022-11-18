@@ -1,20 +1,40 @@
 const {db} = require('../database');
+const bcrypt = require('bcryptjs');
 
 const addUser = async (req, res) => {
-    
-    const name = req.body.nombre_cancha 
-    const category = req.body.id_categoriacancha
-    const status = req.body.estatus_cancha
-    
 
-    try {
-        const result = await db.query('INSERT INTO canchas (nombre_cancha, id_categoriacancha,estatus_cancha) VALUES ($1,$2,$3) RETURNING *', [
-            name,  category, status
-        ]);
-        res.json(result.rows[0]);
-    } catch (error) {
-        console.log(error.message);
+    const username = req.body.username;
+    const password = req.body.password;
+    const nombres = req.body.nombres;
+    const apellidos = req.body.apellidos;
+    const cedula = req.body.cedula;
+    const accion = req.body.accion;
+    const fecha_nacimiento = req.body.fecha_nacimiento;
+    const correo_electronico = req.body.correo_electronico;
+    const sexo = req.body.sexo;
+    console.log("Sexo: " + sexo);
+    const existingUser = await db.query('SELECT username from users where username = $1',
+    [username])
+
+    if (existingUser.rowCount==0){
+
+        const hashedPass = await bcrypt.hash(password, 10);
+        const newUserQuery = await db.query("INSERT INTO users (username, passhash, nombres, apellidos, cedula, accion, fecha_nacimiento, correo_electronico, sexo) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *",
+        [username, hashedPass, nombres, apellidos, cedula, accion, fecha_nacimiento, correo_electronico, sexo]);
+        
+        console.log(newUserQuery.rows[0]);
+        req.session.user = {
+            username: req.body.username,
+            id: newUserQuery.rows[0].id
+        }
+        console.log(newUserQuery.rows[0]);
+        res.json({loggedIn:true, username: req.body.username, id:newUserQuery.rows[0].id})
+
+    }else{
+        res.json({loggedIn: false, status: false});
     }
+        
+    
 }
 const UpdateUser = async (req, res) => {
     
@@ -49,7 +69,7 @@ const DeleteUser = async (req, res) => {
 
 const GetAllUsers = async (req, res) => {
     try {
-        const result = await db.query('SELECT * FROM users');
+        const result = await db.query('SELECT * FROM users ORDER BY nombres');
         //console.log("RESULT : " + JSON.stringify(result));
         res.json(result.rows);
     } catch (error) {

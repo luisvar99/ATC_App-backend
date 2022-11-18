@@ -1,6 +1,7 @@
 const {Router} = require('express')
 const {addGrupo, GetAllGrupos, getSubtorneoGrupos, 
-    UpdateGrupo, DeleteGrupo, addGrupoMember, GetGruposMembers
+    UpdateGrupo, DeleteGrupo, addGrupoMember, GetGruposMembers,
+    DeleteSubTorneoGroupParticipant
 } = require('../Controllers/Grupos')
 
 const router = new Router();
@@ -15,5 +16,6 @@ router.post('/api/addGrupoMember', addGrupoMember)
 router.put('/api/editGrupo/:idGrupo', UpdateGrupo)
 
 router.delete('/api/deleteGrupo/idGrupo=:idGrupo', DeleteGrupo)
+router.delete('/api/deleteSubTorneoGroupParticipant/idGrupo=:idGrupo/idUser=:idUser', DeleteSubTorneoGroupParticipant)
 
 module.exports = router;

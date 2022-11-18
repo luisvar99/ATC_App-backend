@@ -65,6 +65,21 @@ const DeleteGrupo = async (req, res) => {
     }
 }
 
+const DeleteSubTorneoGroupParticipant = async (req, res) => {
+
+    const idGrupo = req.params.idGrupo;
+    const idUser = req.params.idUser;
+
+    try {
+        const result = await db.query('DELETE from participantesgrupo WHERE id_grupo = $1 AND user_id = $2 RETURNING *', [
+            idGrupo, idUser
+        ]);
+        res.json(result.rows[0]);
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 const GetAllGrupos = async (req, res) => {
     try {
         const result = await db.query('SELECT * FROM subtorneogrupos');
@@ -91,7 +106,7 @@ const getSubtorneoGrupos = async (req, res) => {
 const GetGruposMembers = async (req, res) => {
     const idSubTorneo = req.params.idSubtorneo;
     try {
-        const result = await db.query(`select u.username, subt.nombre, tor.nombre_torneo, subgrupo.nombre_grupo
+        const result = await db.query(`select u.id, u.username, subt.nombre, tor.nombre_torneo, subgrupo.nombre_grupo, part.id_grupo
         from users u
         JOIN participantesgrupo part on part.user_id = u.id
         JOIN subtorneogrupos subgrupo on subgrupo.id_grupo = part.id_grupo
@@ -112,5 +127,6 @@ const GetGruposMembers = async (req, res) => {
 module.exports = {
     addGrupo, GetAllGrupos, 
     getSubtorneoGrupos, UpdateGrupo, 
-    DeleteGrupo, addGrupoMember, GetGruposMembers
+    DeleteGrupo, addGrupoMember, GetGruposMembers,
+    DeleteSubTorneoGroupParticipant
 }
