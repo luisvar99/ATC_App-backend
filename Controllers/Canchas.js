@@ -47,9 +47,19 @@ const DeleteCancha = async (req, res) => {
     }
 }
 
-const GetAllCanchas = async (req, res) => {
+const getAllTennisCanchas = async (req, res) => {
     try {
-        const result = await db.query('SELECT * FROM canchas order by nombre_cancha');
+        const result = await db.query('SELECT * FROM canchas WHERE id_categoriacancha = 0 order by nombre_cancha');
+        console.log("RESULT : " + JSON.stringify(result));
+        res.json(result.rows);
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const getAllPadelCanchas = async (req, res) => {
+    try {
+        const result = await db.query('SELECT * FROM canchas WHERE id_categoriacancha = 1 order by nombre_cancha');
         console.log("RESULT : " + JSON.stringify(result));
         res.json(result.rows);
     } catch (error) {
@@ -72,7 +82,7 @@ const GetCanchaById = async (req, res) => {
 
 
 module.exports = {
-    addCancha, GetAllCanchas, 
+    addCancha, getAllTennisCanchas, 
     GetCanchaById, UpdateCancha, 
-    DeleteCancha
+    DeleteCancha, getAllPadelCanchas
 }
