@@ -67,6 +67,16 @@ const getAllPadelCanchas = async (req, res) => {
     }
 }
 
+const getAllCanchas = async (req, res) => {
+    try {
+        const result = await db.query('SELECT * FROM canchas order by nombre_cancha');
+        console.log("RESULT : " + JSON.stringify(result));
+        res.json(result.rows);
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 const GetCanchaById = async (req, res) => {
     const id = req.params.idCancha;
     console.log(JSON.stringify(id));
@@ -84,5 +94,6 @@ const GetCanchaById = async (req, res) => {
 module.exports = {
     addCancha, getAllTennisCanchas, 
     GetCanchaById, UpdateCancha, 
-    DeleteCancha, getAllPadelCanchas
+    DeleteCancha, getAllPadelCanchas,
+    getAllCanchas
 }

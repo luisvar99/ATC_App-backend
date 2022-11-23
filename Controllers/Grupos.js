@@ -9,7 +9,7 @@ const addGrupo = async (req, res) => {
     //console.log(idSubTorneo + ' ' + numberOfGroups);
     try {
         for (let index = 0; index < numberOfGroups; index++) {
-            const result = await db.query(`INSERT INTO subtorneogrupos (id_subtorneo, nombre_grupo, isPublicado) VALUES ($1, 'Grupo ${index+1}' ) RETURNING *`, [
+            const result = await db.query(`INSERT INTO subtorneogrupos (id_subtorneo, nombre_grupo, "isPublicado") VALUES ($1, 'Grupo ${index+1}', $2 ) RETURNING *`, [
                 idSubTorneo, isPublicado
             ]);
             response.push(result.rows[0]);
@@ -106,13 +106,13 @@ const getSubtorneoGrupos = async (req, res) => {
 const GetGruposMembers = async (req, res) => {
     const idSubTorneo = req.params.idSubtorneo;
     try {
-        const result = await db.query(`select u.id, u.username, subt.nombre, tor.nombre_torneo, subgrupo.nombre_grupo, part.id_grupo
+        const result = await db.query(`select u.accion, u.nombres, u.apellidos, u.id, u.username, subt.nombre, tor.nombre_torneo, subgrupo.nombre_grupo, part.id_grupo, subgrupo."isPublicado"
         from users u
         JOIN participantesgrupo part on part.user_id = u.id
         JOIN subtorneogrupos subgrupo on subgrupo.id_grupo = part.id_grupo
         JOIN subtorneos subt on subt.id_subtorneo = subgrupo.id_subtorneo
         JOIN torneos tor on tor.id_torneo = subt.id_torneo
-        WHERE subgrupo.id_subtorneo = $1 AND "isPublicado"=1
+        WHERE subgrupo.id_subtorneo = $1 
         ORDER BY subgrupo.nombre_grupo`  , 
         [idSubTorneo]);
         //console.log("RESULT : " + result);

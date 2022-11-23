@@ -6,7 +6,7 @@ const bcrypt = require('bcryptjs');
 const Login = async (req, res) => {
     //console.log(req.session);
     
-    const potencialLogin = await db.query("SELECT id, username, passhash FROM users WHERE username=$1", 
+    const potencialLogin = await db.query("SELECT id, username, passhash, role FROM users WHERE username=$1", 
     [req.body.username])
     
     if(potencialLogin.rowCount>0){
@@ -16,7 +16,7 @@ const Login = async (req, res) => {
                 username:req.body.username,
                 id: potencialLogin.rows[0].id
             }
-            res.json({loggedIn: true, username: req.body.username, id:potencialLogin.rows[0].id})
+            res.json({loggedIn: true, username: req.body.username, id:potencialLogin.rows[0].id, role: potencialLogin.rows[0].role})
             //console.log("Segundo Session");
             console.log(req.session);
             //console.log("Good Login!");

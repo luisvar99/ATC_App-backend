@@ -81,8 +81,21 @@ const GetUserById = async (req, res) => {
     const id = req.params.idCancha;
     console.log(JSON.stringify(id));
     try {
-        const result = await db.query('SELECT * FROM canchas WHERE id_cancha = $1 ' , 
+        const result = await db.query('SELECT * FROM users WHERE id = $1 ' , 
         [id]);
+        console.log("RESULT : " + result);
+        res.json(result.rows);
+    } catch (error) {
+        console.log(error.message);
+    }
+} 
+
+const GetUserByName = async (req, res) => {
+    const apellido = req.params.apellido;
+    console.log(JSON.stringify(apellido));
+    try {
+        const result = await db.query('SELECT * FROM users WHERE apellidos LIKE $1 ' , 
+        [`%${apellido}%`]);
         console.log("RESULT : " + result);
         res.json(result.rows);
     } catch (error) {
@@ -94,5 +107,5 @@ const GetUserById = async (req, res) => {
 module.exports = {
     addUser, GetAllUsers, 
     GetUserById, UpdateUser, 
-    DeleteUser
+    DeleteUser, GetUserByName
 }
