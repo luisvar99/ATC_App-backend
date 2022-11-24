@@ -34,12 +34,13 @@ const UpdateTorneo = async (req, res) => {
     const fecha_fin_inscripcion= req.body.fecha_fin_inscripcion
     const id_categoria = req.body.id_categoria
     const descripcion = req.body.descripcion
+    const modalidad = req.body.modalidad
 
     const id_torneo = req.params.idTorneo
 
     try {
-        const result = await db.query('UPDATE torneos SET nombre_torneo=$1, fecha_inicio=$2, fecha_fin=$3, fecha_inicio_inscripcion=$4, fecha_fin_inscripcion=$5, id_categoria=$6, descripcion=$7 WHERE id_torneo=$8 RETURNING *', [
-            name,  fecha_inicio, fecha_fin, fecha_inicio_inscripcion,fecha_fin_inscripcion, id_categoria, descripcion, id_torneo
+        const result = await db.query('UPDATE torneos SET nombre_torneo=$1, fecha_inicio=$2, fecha_fin=$3, fecha_inicio_inscripcion=$4, fecha_fin_inscripcion=$5, id_categoria=$6, descripcion=$7, modalidad=$8 WHERE id_torneo=$9 RETURNING *', [
+            name,  fecha_inicio, fecha_fin, fecha_inicio_inscripcion,fecha_fin_inscripcion, id_categoria, descripcion, modalidad, id_torneo
         ]);
         //console.log(result);
         res.json(result.rows);

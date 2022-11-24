@@ -97,7 +97,10 @@ const GetSingleSubTorneo = async (req, res) => {
     const id = req.params.idSubTorneo;
     //console.log("GetSingleSubTorneo " + id);
     try {
-        const result = await db.query('SELECT * FROM subtorneos WHERE id_subtorneo = $1 ' , 
+        const result = await db.query(`SELECT subt.nombre, subt.cantidad_personas, subt.id_torneo, tor.modalidad 
+        FROM subtorneos subt
+        JOIN torneos tor on tor.id_torneo = subt.id_torneo
+        WHERE id_subtorneo = $1` , 
         [id]);
         //console.log("RESULT : " + JSON.stringify(result));
         res.json(result.rows);

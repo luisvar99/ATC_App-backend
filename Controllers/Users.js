@@ -2,7 +2,7 @@ const {db} = require('../database');
 const bcrypt = require('bcryptjs');
 
 const addUser = async (req, res) => {
-
+    console.log("Role " + req.body.role);
     const username = req.body.username;
     const password = req.body.password;
     const nombres = req.body.nombres;
@@ -12,15 +12,16 @@ const addUser = async (req, res) => {
     const fecha_nacimiento = req.body.fecha_nacimiento;
     const correo_electronico = req.body.correo_electronico;
     const sexo = req.body.sexo;
-    console.log("Sexo: " + sexo);
+    const rol = req.body.role;
+
     const existingUser = await db.query('SELECT username from users where username = $1',
     [username])
 
     if (existingUser.rowCount==0){
 
         const hashedPass = await bcrypt.hash(password, 10);
-        const newUserQuery = await db.query("INSERT INTO users (username, passhash, nombres, apellidos, cedula, accion, fecha_nacimiento, correo_electronico, sexo) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *",
-        [username, hashedPass, nombres, apellidos, cedula, accion, fecha_nacimiento, correo_electronico, sexo]);
+        const newUserQuery = await db.query("INSERT INTO users (username, passhash, nombres, apellidos, cedula, accion, fecha_nacimiento, correo_electronico, sexo, rol) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING *",
+        [username, hashedPass, nombres, apellidos, cedula, accion, fecha_nacimiento, correo_electronico, sexo, rol]);
         
         console.log(newUserQuery.rows[0]);
         req.session.user = {
