@@ -106,14 +106,17 @@ const getSubtorneoGrupos = async (req, res) => {
 const GetGruposMembers = async (req, res) => {
     const idSubTorneo = req.params.idSubtorneo;
     try {
-        const result = await db.query(`select u.accion, u.nombres, u.apellidos, u.id, u.username, subt.nombre, tor.nombre_torneo, subgrupo.nombre_grupo, part.id_grupo, subgrupo."isPublicado"
+        const result = await db.query(`select u.accion, u.nombres, u.apellidos, u.id, u.username, 
+        subt.nombre, tor.nombre_torneo, subgrupo.nombre_grupo, part.id_grupo, subgrupo."isPublicado", 
+        par.id_pareja
         from users u
         JOIN participantesgrupo part on part.user_id = u.id
         JOIN subtorneogrupos subgrupo on subgrupo.id_grupo = part.id_grupo
         JOIN subtorneos subt on subt.id_subtorneo = subgrupo.id_subtorneo
         JOIN torneos tor on tor.id_torneo = subt.id_torneo
+        JOIN parejas par on par.id_user_one = u.id or par.id_user_two = u.id
         WHERE subgrupo.id_subtorneo = $1 
-        ORDER BY subgrupo.nombre_grupo`  , 
+        ORDER BY subgrupo.nombre_grupo, par.id_pareja`  , 
         [idSubTorneo]);
         //console.log("RESULT : " + result);
         res.json(result.rows);
