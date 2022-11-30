@@ -51,9 +51,20 @@ const DeleteHorario = async (req, res) => {
     }
 }
 
-const GetAllHorarios = async (req, res) => {
+const GetSubtorneoMatchesById = async (req, res) => {
+    const idPartido = req.params.idPartido;
+    console.log("idPartido " + idPartido);
+
     try {
-        const result = await db.query('SELECT * FROM horarioscancha order by inicio');
+        const result = await db.query(`select u.nombres, u.apellidos, part.id_partido, part.fecha, 
+        part.hora, u.accion
+        from users u
+        JOIN partido part on part.id_player_uno = u.id or part.id_player_dos = u.id or 
+        part.id_player_tres = u.id or part.id_player_cuatro = u.id 
+        WHERE id_partido = $1
+        Order by id_partido`,
+        [idPartido]
+        );
         //console.log("RESULT : " + JSON.stringify(result));
         res.json(result.rows);
     } catch (error) {
@@ -61,13 +72,14 @@ const GetAllHorarios = async (req, res) => {
     }
 }
 
-const GetHorarioById = async (req, res) => {
-    const id = req.params.idHorario;
-    console.log("ID GetHorarioById " + id);
+const GetSubtorneoMatches = async (req, res) => {
+    const id = req.params.idSubtorneo;
+    //console.log("ID GetHorarioById " + id);
     try {
-        const result = await db.query('SELECT * FROM horarioscancha WHERE id_Horario = $1 ' , 
+        const result = await db.query(`select * from partido
+        WHERE id_subtorneo = $1 
+        Order by id_partido` , 
         [id]);
-        console.log("RESULT GetHorarioById: " + result);
         res.json(result.rows);
     } catch (error) {
         console.log(error.message);
@@ -76,7 +88,7 @@ const GetHorarioById = async (req, res) => {
 
 
 module.exports = {
-    addMatch, GetAllHorarios, 
-    GetHorarioById, UpdateHorario, 
+    addMatch, GetSubtorneoMatchesById, 
+    GetSubtorneoMatches, UpdateHorario, 
     DeleteHorario
 }

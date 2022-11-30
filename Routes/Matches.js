@@ -1,5 +1,5 @@
 const {Router} = require('express')
-const {addMatch, GetAllHorarios, GetHorarioById, 
+const {addMatch, GetSubtorneoMatchesById, GetSubtorneoMatches, 
     UpdateHorario, DeleteHorario
 } = require('../Controllers/Matches')
 
@@ -7,8 +7,8 @@ const router = new Router();
 
 router.post('/api/createSubtorneoMatch', addMatch)
 
-router.get('/api/getAllHorarios', GetAllHorarios)
-router.get('/api/getSingleHorario/:idHorario', GetHorarioById)
+router.get('/api/GetSubtorneoMatchesById/:idPartido', GetSubtorneoMatchesById)
+router.get('/api/GetSubtorneoMatches/:idSubtorneo', GetSubtorneoMatches)
 
 router.put('/api/editHorario/:idHorario', UpdateHorario)
 
