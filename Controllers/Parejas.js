@@ -76,7 +76,7 @@ const getSubtorneoParejas = async (req, res) => {
     const idSubTorneo = req.params.idSubtorneo;
     console.log(idSubTorneo);
     try {
-        const result = await db.query(`SELECT u.id, u.username, st.nombre, p.id_pareja from users u
+        const result = await db.query(`SELECT u.id, u.username, u.nombres, u.apellidos, u.accion, st.nombre, p.id_pareja from users u
         JOIN parejas p on p.id_user_one = u.id or p.id_user_two = u.id
         JOIN subtorneos st on st.id_subtorneo = p.id_subtorneo WHERE p.id_subtorneo = $1 ` , 
         [idSubTorneo]);
