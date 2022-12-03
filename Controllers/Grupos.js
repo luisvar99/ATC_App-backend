@@ -78,6 +78,20 @@ const UpdateGrupo = async (req, res) => {
         console.log(error.message);
     }
 }
+const PublishGrupos = async (req, res) => {
+    
+    const isPublicado = req.body.isPublicado;
+    const idSubtorneo = req.params.idSubtorneo;
+
+    try {
+        const result = await db.query('UPDATE subtorneogrupos set "isPublicado"=$1 WHERE id_Subtorneo = $2 RETURNING *', [
+            isPublicado,  isPublicado
+        ]);
+        res.json(result.rows);
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
 const DeleteGrupo = async (req, res) => {
 
@@ -120,7 +134,7 @@ const GetAllGrupos = async (req, res) => {
 
 const getSubtorneoGrupos = async (req, res) => {
     const idSubTorneo = req.params.idSubtorneo;
-    //console.log(idSubTorneo);
+    console.log("getSubtorneoGrupos:" + idSubTorneo);
     try {
         const result = await db.query('SELECT * FROM subtorneogrupos WHERE id_subtorneo = $1 ORDER BY numero_grupo' , 
         [idSubTorneo]);
@@ -153,11 +167,34 @@ const GetGruposMembers = async (req, res) => {
     }finally{
     }
 }
+const GetGruposById = async (req, res) => {
+    const idGrupo = req.params.idGrupo;
+    try {
+        const result = await db.query(`select u.accion, u.nombres, u.apellidos, u.id, u.username, 
+        subt.nombre, tor.nombre_torneo, subgrupo.numero_grupo, part.id_grupo, subgrupo."isPublicado", 
+        par.id_pareja
+        from users u
+        JOIN participantesgrupo part on part.user_id = u.id
+        JOIN subtorneogrupos subgrupo on subgrupo.id_grupo = part.id_grupo
+        JOIN subtorneos subt on subt.id_subtorneo = subgrupo.id_subtorneo
+        JOIN torneos tor on tor.id_torneo = subt.id_torneo
+        JOIN parejas par on par.id_user_one = u.id or par.id_user_two = u.id
+        WHERE subgrupo.id_grupo = $1 
+        ORDER BY subgrupo.numero_grupo, par.id_pareja`  , 
+        [idGrupo]);
+        //console.log("RESULT : " + result);
+        res.json(result.rows);
+    } catch (error) {
+        console.log(error.message);
+    }finally{
+    }
+}
 
 
 module.exports = {
     addGrupo, GetAllGrupos, 
     getSubtorneoGrupos, UpdateGrupo, 
     DeleteGrupo, addGrupoMember, GetGruposMembers,
-    DeleteSubTorneoGroupParticipant
+    DeleteSubTorneoGroupParticipant, GetGruposById,
+    PublishGrupos
 }
