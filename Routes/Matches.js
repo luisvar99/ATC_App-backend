@@ -1,6 +1,6 @@
 const {Router} = require('express')
 const {addMatch, GetSubtorneoMatchesById, GetSubtorneoMatches, 
-    UpdateHorario, DeleteHorario
+    UpdateHorario, DeleteMatch
 } = require('../Controllers/Matches')
 
 const router = new Router();
@@ -12,6 +12,6 @@ router.get('/api/GetSubtorneoMatches/:idSubtorneo', GetSubtorneoMatches)
 
 router.put('/api/editHorario/:idHorario', UpdateHorario)
 
-router.delete('/api/deleteHorario/:idHorario', DeleteHorario)
+router.delete('/api/DeleteMatch/:idMatch', DeleteMatch)
 
 module.exports = router;

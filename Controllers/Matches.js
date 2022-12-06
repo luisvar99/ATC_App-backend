@@ -10,10 +10,11 @@ const addMatch = async (req, res) => {
     const resultado = req.body.resultado
     const fecha = req.body.fecha
     const hora = req.body.hora
+    const ronda = req.body.ronda
 
     try {
-        const result = await db.query('INSERT INTO partido (id_subtorneo, id_player_uno,id_player_dos, id_player_tres, id_player_cuatro, resultado, fecha, hora) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *', [
-            idSubtorneo,  id_player_uno, id_player_dos, id_player_tres, id_player_cuatro, resultado, fecha, hora
+        const result = await db.query('INSERT INTO partido (id_subtorneo, id_player_uno,id_player_dos, id_player_tres, id_player_cuatro, resultado, fecha, hora, id_ronda) VALUES ($1,$2,$3,$4,$5,$6,$7,$8, $9) RETURNING *', [
+            idSubtorneo,  id_player_uno, id_player_dos, id_player_tres, id_player_cuatro, resultado, fecha, hora, ronda
         ]);
         res.json(result.rows[0]);
     } catch (error) {
@@ -37,13 +38,13 @@ const UpdateHorario = async (req, res) => {
     }
 }
 
-const DeleteHorario = async (req, res) => {
+const DeleteMatch = async (req, res) => {
 
-    const id_Horario = req.params.idHorario;
+    const id_Match = req.params.idMatch;
 
     try {
-        const result = await db.query('DELETE from horarioscancha WHERE id_Horario = $1 RETURNING *', [
-            id_Horario
+        const result = await db.query('DELETE from partido WHERE id_partido = $1 RETURNING *', [
+            id_Match
         ]);
         res.json(result.rows[0]);
     } catch (error) {
@@ -57,10 +58,13 @@ const GetSubtorneoMatchesById = async (req, res) => {
 
     try {
         const result = await db.query(`select u.nombres, u.apellidos, part.id_partido, part.fecha, 
-        part.hora, u.accion
+        part.hora, u.accion, rnd.nombre, u.accion, tor.modalidad
         from users u
         JOIN partido part on part.id_player_uno = u.id or part.id_player_dos = u.id or 
         part.id_player_tres = u.id or part.id_player_cuatro = u.id 
+        JOIN rondas rnd on rnd.id_ronda = part.id_ronda
+        JOIN subtorneos subtor on subtor.id_subtorneo = part.id_subtorneo
+		JOIN torneos tor on tor.id_torneo = subtor.id_torneo
         WHERE id_partido = $1
         Order by id_partido`,
         [idPartido]
@@ -74,7 +78,7 @@ const GetSubtorneoMatchesById = async (req, res) => {
 
 const GetSubtorneoMatches = async (req, res) => {
     const id = req.params.idSubtorneo;
-    //console.log("ID GetHorarioById " + id);
+    console.log("GetSubtorneoMatches " + id);
     try {
         const result = await db.query(`select * from partido
         WHERE id_subtorneo = $1 
@@ -90,5 +94,5 @@ const GetSubtorneoMatches = async (req, res) => {
 module.exports = {
     addMatch, GetSubtorneoMatchesById, 
     GetSubtorneoMatches, UpdateHorario, 
-    DeleteHorario
+    DeleteMatch
 }

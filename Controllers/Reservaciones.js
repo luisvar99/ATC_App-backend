@@ -98,7 +98,7 @@ const GetReservaDetails = async (req, res) => {
         JOIN horarioscancha h on h.id_horario = r.id_horario
         WHERE id_reserva = $1` ,
         [idReserva]);
-        console.log("RESULT : " + result.rows);
+        //console.log("RESULT : " + JSON.stringify(result.rows));
         res.json(result.rows);
     } catch (error) {
         console.log(error.message);

@@ -11,6 +11,7 @@ const ParejasRoute = require('./Routes/Parejas')
 const HorariosRoute = require('./Routes/Horarios')
 const ReservacionesRoute = require('./Routes/Reservaciones')
 const MatchesRoute = require('./Routes/Matches')
+const RondasRoute = require('./Routes/Rondas')
 
 const session = require('express-session')
 require('dotenv').config();
@@ -51,6 +52,7 @@ app.use(ParejasRoute)
 app.use(HorariosRoute)
 app.use(ReservacionesRoute)
 app.use(MatchesRoute)
+app.use(RondasRoute)
 
 app.get('/', (req, res) => {
     res.json("Hello")
