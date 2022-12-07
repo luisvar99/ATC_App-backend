@@ -50,7 +50,7 @@ const DeleteRondas = async (req, res) => {
 const getAllrondas = async (req, res) => {
     try {
         const result = await db.query('SELECT * FROM rondas order by nombre');
-        console.log("RESULT : " + JSON.stringify(result));
+        //console.log("RESULT : " + JSON.stringify(result));
         res.json(result.rows);
     } catch (error) {
         console.log(error.message);
@@ -63,7 +63,7 @@ const GetRondasById = async (req, res) => {
     try {
         const result = await db.query('SELECT * FROM rondas WHERE id_cancha = $1 ' , 
         [id]);
-        console.log("RESULT : " + result);
+        //console.log("RESULT : " + result);
         res.json(result.rows);
     } catch (error) {
         console.log(error.message);

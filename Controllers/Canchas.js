@@ -50,7 +50,7 @@ const DeleteCancha = async (req, res) => {
 const getAllTennisCanchas = async (req, res) => {
     try {
         const result = await db.query('SELECT * FROM canchas WHERE id_categoriacancha = 0 order by nombre_cancha');
-        console.log("RESULT : " + JSON.stringify(result));
+        //console.log("RESULT : " + JSON.stringify(result));
         res.json(result.rows);
     } catch (error) {
         console.log(error.message);
@@ -60,7 +60,7 @@ const getAllTennisCanchas = async (req, res) => {
 const getAllPadelCanchas = async (req, res) => {
     try {
         const result = await db.query('SELECT * FROM canchas WHERE id_categoriacancha = 1 order by nombre_cancha');
-        console.log("RESULT : " + JSON.stringify(result));
+        //console.log("RESULT : " + JSON.stringify(result));
         res.json(result.rows);
     } catch (error) {
         console.log(error.message);
@@ -70,7 +70,7 @@ const getAllPadelCanchas = async (req, res) => {
 const getAllCanchas = async (req, res) => {
     try {
         const result = await db.query('SELECT * FROM canchas order by nombre_cancha');
-        console.log("RESULT : " + JSON.stringify(result));
+        //console.log("RESULT : " + JSON.stringify(result));
         res.json(result.rows);
     } catch (error) {
         console.log(error.message);
@@ -83,7 +83,7 @@ const GetCanchaById = async (req, res) => {
     try {
         const result = await db.query('SELECT * FROM canchas WHERE id_cancha = $1 ' , 
         [id]);
-        console.log("RESULT : " + result);
+        //console.log("RESULT : " + result);
         res.json(result.rows);
     } catch (error) {
         console.log(error.message);

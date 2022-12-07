@@ -1,11 +1,12 @@
 const {Router} = require('express')
 const {addTorneo, GetAllTorneos, GetTorneoById, 
-    UpdateTorneo, DeleteTorneo
+    UpdateTorneo, DeleteTorneo, GetTorneoColores
 } = require('../Controllers/Torneos')
 
 const router = new Router();
 
 router.get('/api/getAllTorneos', GetAllTorneos)
+router.get('/api/getTorneoColores', GetTorneoColores)
 
 router.get('/api/getSingleTorneo/:idTorneo', GetTorneoById)
 router.post('/api/addTorneo', addTorneo)

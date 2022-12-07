@@ -70,7 +70,7 @@ const DeleteUser = async (req, res) => {
 
 const GetAllUsers = async (req, res) => {
     try {
-        const result = await db.query('SELECT * FROM users ORDER BY nombres');
+        const result = await db.query('SELECT * FROM users ORDER BY apellidos');
         //console.log("RESULT : " + JSON.stringify(result));
         res.json(result.rows);
     } catch (error) {
@@ -84,7 +84,7 @@ const GetUserById = async (req, res) => {
     try {
         const result = await db.query('SELECT * FROM users WHERE id = $1 ' , 
         [id]);
-        console.log("RESULT : " + result);
+        //console.log("RESULT : " + result);
         res.json(result.rows);
     } catch (error) {
         console.log(error.message);
@@ -97,7 +97,7 @@ const GetUserByName = async (req, res) => {
     try {
         const result = await db.query('SELECT * FROM users WHERE apellidos LIKE $1 ' , 
         [`%${apellido}%`]);
-        console.log("RESULT : " + result);
+        //console.log("RESULT : " + result);
         res.json(result.rows);
     } catch (error) {
         console.log(error.message);

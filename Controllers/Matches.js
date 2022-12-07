@@ -13,11 +13,12 @@ const addMatch = async (req, res) => {
     const ronda = req.body.ronda
 
     try {
-        const result = await db.query('INSERT INTO partido (id_subtorneo, id_player_uno,id_player_dos, id_player_tres, id_player_cuatro, resultado, fecha, hora, id_ronda) VALUES ($1,$2,$3,$4,$5,$6,$7,$8, $9) RETURNING *', [
+        const result = await db.query('INSERT INTO partido (id_subtorneo, id_player_uno,id_player_dos, id_player_tres, id_player_cuatro, resultado, fecha, id_horario, id_ronda) VALUES ($1,$2,$3,$4,$5,$6,$7,$8, $9) RETURNING *', [
             idSubtorneo,  id_player_uno, id_player_dos, id_player_tres, id_player_cuatro, resultado, fecha, hora, ronda
         ]);
-        res.json(result.rows[0]);
+        res.json({success:true});
     } catch (error) {
+        res.json({success:false});
         console.log(error.message);
     }
 }
@@ -58,7 +59,7 @@ const GetSubtorneoMatchesById = async (req, res) => {
 
     try {
         const result = await db.query(`select u.nombres, u.apellidos, part.id_partido, part.fecha, 
-        part.hora, u.accion, rnd.nombre, u.accion, tor.modalidad
+        part.id_horario, u.accion, rnd.nombre, u.accion, tor.modalidad
         from users u
         JOIN partido part on part.id_player_uno = u.id or part.id_player_dos = u.id or 
         part.id_player_tres = u.id or part.id_player_cuatro = u.id 

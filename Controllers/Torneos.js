@@ -75,6 +75,16 @@ const GetAllTorneos = async (req, res) => {
     }
 }
 
+const GetTorneoColores = async (req, res) => {
+    try {
+        const result = await db.query('SELECT * FROM torneos where (fecha_fin > CURRENT_DATE) AND is_colores=true');
+        //console.log("RESULT : " + JSON.stringify(result));
+        res.json(result.rows);
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 const GetTorneoById = async (req, res) => {
     const id = req.params.idTorneo;
     //console.log(id);
@@ -92,5 +102,5 @@ const GetTorneoById = async (req, res) => {
 module.exports = {
     addTorneo, GetAllTorneos, 
     GetTorneoById, UpdateTorneo, 
-    DeleteTorneo
+    DeleteTorneo, GetTorneoColores
 }
