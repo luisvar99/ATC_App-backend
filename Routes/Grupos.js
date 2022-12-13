@@ -1,7 +1,8 @@
 const {Router} = require('express')
 const {addGrupo, GetAllGrupos, getSubtorneoGrupos, 
     UpdateGrupo, DeleteGrupo, addGrupoMember, GetGruposMembers,
-    DeleteSubTorneoGroupParticipant, GetGruposById, PublishGrupos
+    DeleteSubTorneoGroupParticipant, GetGruposById, PublishGrupos,
+    CreateColoresGrupo
 } = require('../Controllers/Grupos')
 
 const router = new Router();
@@ -13,6 +14,7 @@ router.get('/api/GetGruposById/:idGrupo', GetGruposById)
 
 router.post('/api/addGrupo/idsubtorneo=:idSubtorneo/numberOfGroups=:numberOfGroups', addGrupo)
 router.post('/api/addGrupoMember', addGrupoMember)
+router.post('/api/CreateColoresGrupo', CreateColoresGrupo)
 
 router.put('/api/editGrupo/:idGrupo', UpdateGrupo)
 router.put('/api/PublishGrupos/:idSubtorneo', PublishGrupos)

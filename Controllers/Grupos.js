@@ -186,8 +186,23 @@ const GetGruposById = async (req, res) => {
         res.json(result.rows);
     } catch (error) {
         console.log(error.message);
-    }finally{
     }
+}
+
+
+const CreateColoresGrupo = async (req, res) => {
+    const id_torneo = req.body.id_torneo 
+    const nombre_bombo = req.body.nombre_bombo 
+    //console.log("numberOfGroups: " + typeof(numberOfGroups));
+    try {
+        const result = await db.query(`INSERT INTO bomboscolores (id_torneo, nombre_bombo) VALUES ($1, $2) RETURNING *`, [
+            id_torneo, nombre_bombo])
+            
+        res.json({success:true, result: result.rows[0]});
+        } catch (error) {
+            res.json({success: 'Failed', error: error.message});
+            console.log(error.message);
+    }        
 }
 
 
@@ -196,5 +211,5 @@ module.exports = {
     getSubtorneoGrupos, UpdateGrupo, 
     DeleteGrupo, addGrupoMember, GetGruposMembers,
     DeleteSubTorneoGroupParticipant, GetGruposById,
-    PublishGrupos
+    PublishGrupos, CreateColoresGrupo
 }

@@ -106,6 +106,20 @@ const GetParejasMembers = async (req, res) => {
     }
 }
 
+const getColoresParejas = async (req, res) => {
+    const idColores = req.params.idColores;
+
+    console.log(idColores);
+    
+    try {
+        const result = await db.query(`` , 
+        [idSubTorneo]);
+        //console.log("RESULT : " + result);
+        res.json(result.rows);
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
 module.exports = {
     addSubtorneoPareja, GetAllParejas, 
