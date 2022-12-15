@@ -106,14 +106,32 @@ const GetParejasMembers = async (req, res) => {
     }
 }
 
-const getColoresParejas = async (req, res) => {
-    const idColores = req.params.idColores;
+const GetColoresParejas = async (req, res) => {
+    const id_torneo = req.params.id_torneo;
+    console.log("id_torneo : " + id_torneo);
 
-    console.log(idColores);
     
     try {
-        const result = await db.query(`` , 
-        [idSubTorneo]);
+        const result = await db.query(`SELECT * FROM parejascolores WHERE id_torneo = $1 ` , 
+        [id_torneo]);
+        res.json(result.rows);
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const getColoresParejasById = async (req, res) => {
+    const id_pareja = req.params.id_pareja;
+    console.log("id_pareja : " + id_pareja);
+
+    try {
+        const result = await db.query(`select parejas.id_torneo, u.nombres, u.apellidos, parejas.id_pareja 
+        FROM parejascolores parejas
+        JOIN users u ON parejas.id_user_one = u.id or parejas.id_user_two = u.id
+        WHERE id_pareja = $1 
+        ORDER BY parejas.id_pareja 
+        ` , 
+        [id_pareja]);
         //console.log("RESULT : " + result);
         res.json(result.rows);
     } catch (error) {
@@ -124,5 +142,6 @@ const getColoresParejas = async (req, res) => {
 module.exports = {
     addSubtorneoPareja, GetAllParejas, 
     getSubtorneoParejas, UpdatePareja, 
-    DeletePareja, addParejaMember, GetParejasMembers
+    DeletePareja, addParejaMember, GetParejasMembers,
+    GetColoresParejas, getColoresParejasById
 }

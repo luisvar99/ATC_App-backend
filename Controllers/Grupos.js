@@ -205,11 +205,63 @@ const CreateColoresGrupo = async (req, res) => {
     }        
 }
 
+const CreateColoresEquipo = async (req, res) => {
+    const nombre_equipo = req.body.nombre_equipo 
+    const id_bombo = req.body.id_bombo 
+    const id_torneo = req.body.id_torneo 
+    const isPublicado = req.body.isPublicado 
+    const color = req.body.color 
+
+    try {
+        const result = await db.query(`INSERT INTO equiposcolores (nombre_equipo, id_bombo, id_torneo, "isPublicado", color) VALUES ($1, $2, $3, $4, $5) RETURNING *`, [
+            nombre_equipo, id_bombo, id_torneo, isPublicado, color])
+            
+        res.json({success:true, result: result.rows[0]});
+        } catch (error) {
+            res.json({success: 'Failed', error: error.message});
+            console.log(error.message);
+    }        
+}
+
+const GetColoresGrupo = async (req, res) => {
+    const id_torneo = req.params.id_torneo 
+    //console.log("id_torneo" + id_torneo);
+    try {
+        const result = await db.query(`SELECT * FROM bomboscolores WHERE id_torneo = $1 `, [
+            id_torneo])
+            
+        res.json(result.rows);
+        } catch (error) {
+            res.json({success: 'Failed', error: error.message});
+            console.log(error.message);
+    }        
+}
+
+const GetColoresTeamsByGroup = async (req, res) => {
+    const id_bombo = req.params.id_bombo 
+    console.log("id_bombo" + id_bombo);
+    try {
+        const result = await db.query(`SELECT e.id_equipo, e.nombre_equipo, bomb.id_bombo, e.color, 
+        bomb.nombre_bombo 
+        FROM equiposcolores e
+        JOIN bomboscolores bomb ON bomb.id_bombo=e.id_bombo 
+        WHERE bomb.id_bombo = $1 `, [
+            id_bombo])
+            
+        res.json(result.rows);
+        //console.log(result.rows);
+        } catch (error) {
+            res.json({success: 'Failed', error: error.message});
+            console.log(error.message);
+    }        
+}
+
 
 module.exports = {
     addGrupo, GetAllGrupos, 
     getSubtorneoGrupos, UpdateGrupo, 
     DeleteGrupo, addGrupoMember, GetGruposMembers,
     DeleteSubTorneoGroupParticipant, GetGruposById,
-    PublishGrupos, CreateColoresGrupo
+    PublishGrupos, CreateColoresGrupo, GetColoresGrupo,
+    CreateColoresEquipo, GetColoresTeamsByGroup
 }

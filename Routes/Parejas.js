@@ -1,6 +1,7 @@
 const {Router} = require('express')
 const {addSubtorneoPareja, GetAllParejas, getSubtorneoParejas, 
-    UpdatePareja, DeletePareja, addParejaMember, GetParejasMembers
+    UpdatePareja, DeletePareja, addParejaMember, GetParejasMembers, 
+    GetColoresParejas, getColoresParejasById
 } = require('../Controllers/Parejas')
 
 const router = new Router();
@@ -8,6 +9,10 @@ const router = new Router();
 router.get('/api/getAllParejas', GetAllParejas)
 router.get('/api/getSubtorneoParejas/:idSubtorneo', getSubtorneoParejas)
 router.get('/api/getParejasMembers/:idSubtorneo', GetParejasMembers)
+
+
+router.get('/api/getColoresParejas/:id_torneo', GetColoresParejas)
+router.get('/api/getColoresParejasById/:id_pareja', getColoresParejasById)
 
 router.post('/api/addSubtorneoPareja', addSubtorneoPareja)
 //router.post('/api/addPareja/idsubtorneo=:idSubtorneo/numberOfGroups=:numberOfGroups', addPareja)
