@@ -239,7 +239,7 @@ const GetColoresGrupo = async (req, res) => {
 
 const GetColoresTeamsByGroup = async (req, res) => {
     const id_bombo = req.params.id_bombo 
-    console.log("id_bombo" + id_bombo);
+    //console.log("id_bombo" + id_bombo);
     try {
         const result = await db.query(`SELECT e.id_equipo, e.nombre_equipo, bomb.id_bombo, e.color, 
         bomb.nombre_bombo 

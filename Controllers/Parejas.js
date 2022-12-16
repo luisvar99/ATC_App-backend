@@ -122,7 +122,7 @@ const GetColoresParejas = async (req, res) => {
 
 const getColoresParejasById = async (req, res) => {
     const id_pareja = req.params.id_pareja;
-    console.log("id_pareja : " + id_pareja);
+    //console.log("id_pareja : " + id_pareja);
 
     try {
         const result = await db.query(`select parejas.id_torneo, u.nombres, u.apellidos, 
@@ -157,9 +157,28 @@ const SetEquipoToPareja = async (req, res) => {
     }
 }
 
+const getPlayersByTeam = async (req, res) => {
+    const id_equipo = req.params.id_equipo;
+    /* console.log("id_equipo : " + id_equipo);
+    console.log("id_pareja : " + id_pareja); */
+
+    try {
+        const result = await db.query(`SELECT u.nombres, u.apellidos, u.accion, parejas.id_pareja
+        FROM parejascolores parejas
+        JOIN users u ON parejas.id_user_one = u.id OR parejas.id_user_two = u.id
+        WHERE id_equipo = $1` , 
+        [id_equipo]);
+        console.log("RESULT : " + JSON.stringify(result.rows));
+        res.json(result.rows);
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 module.exports = {
     addSubtorneoPareja, GetAllParejas, 
     getSubtorneoParejas, UpdatePareja, 
     DeletePareja, addParejaMember, GetParejasMembers,
-    GetColoresParejas, getColoresParejasById, SetEquipoToPareja
+    GetColoresParejas, getColoresParejasById, SetEquipoToPareja,
+    getPlayersByTeam
 }
