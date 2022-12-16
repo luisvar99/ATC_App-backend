@@ -68,7 +68,7 @@ const DeleteTorneo = async (req, res) => {
 const GetAllTorneos = async (req, res) => {
     try {
         const result = await db.query('SELECT * FROM torneos where fecha_fin > CURRENT_DATE AND is_colores=false');
-        //console.log("RESULT : " + JSON.stringify(result));
+        console.log("RESULT : " + JSON.stringify(result.rows));
         res.json(result.rows);
     } catch (error) {
         console.log(error.message);

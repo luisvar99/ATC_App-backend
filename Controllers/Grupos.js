@@ -256,6 +256,21 @@ const GetColoresTeamsByGroup = async (req, res) => {
     }        
 }
 
+const GetEquiposColores = async (req, res) => {
+    const id_torneo = req.params.id_torneo 
+    try {
+        const result = await db.query(`SELECT * from equiposcolores 
+        WHERE id_torneo = $1 `, [
+            id_torneo])
+            
+        res.json(result.rows);
+        //console.log(result.rows);
+        } catch (error) {
+            res.json({success: 'Failed', error: error.message});
+            console.log(error.message);
+    }        
+}
+
 
 module.exports = {
     addGrupo, GetAllGrupos, 
@@ -263,5 +278,6 @@ module.exports = {
     DeleteGrupo, addGrupoMember, GetGruposMembers,
     DeleteSubTorneoGroupParticipant, GetGruposById,
     PublishGrupos, CreateColoresGrupo, GetColoresGrupo,
-    CreateColoresEquipo, GetColoresTeamsByGroup
+    CreateColoresEquipo, GetColoresTeamsByGroup,
+    GetEquiposColores
 }
