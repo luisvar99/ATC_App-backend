@@ -56,11 +56,11 @@ const UpdateUser = async (req, res) => {
 
 const DeleteUser = async (req, res) => {
 
-    const id_cancha = req.params.idCancha;
+    const id_user = req.params.id_user;
 
     try {
-        const result = await db.query('DELETE from canchas WHERE id_cancha = $1 RETURNING *', [
-            id_cancha
+        const result = await db.query('DELETE from users WHERE id = $1 RETURNING *', [
+            id_user
         ]);
         res.json(result.rows[0]);
     } catch (error) {
@@ -95,7 +95,7 @@ const GetUserByName = async (req, res) => {
     const apellido = req.params.apellido;
     console.log(JSON.stringify(apellido));
     try {
-        const result = await db.query('SELECT * FROM users WHERE apellidos LIKE $1 ' , 
+        const result = await db.query('SELECT * FROM users WHERE LOWER(apellidos) LIKE $1 ' , 
         [`%${apellido}%`]);
         //console.log("RESULT : " + result);
         res.json(result.rows);

@@ -92,8 +92,45 @@ const GetSubtorneoMatches = async (req, res) => {
 }
 
 
+//QUERIES CON TONREO COLORES
+const GetColoresMatches = async (req, res) => {
+    const id_torneo = req.params.id_torneo;
+    console.log("GetSubtorneoMatches " + id);
+    try {
+        const result = await db.query(`select * from partidocolores
+        WHERE id_torneo = $1 
+        Order by id_partido` , 
+        [id_torneo]);
+        res.json(result.rows);
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const addColoresMatch = async (req, res) => {
+    
+    const id_torneo = req.body.idSubtorneo
+    const id_pareja_one = req.body.id_pareja_one
+    const id_pareja_two = req.body.id_pareja_two
+    const fecha = req.body.fecha
+    const resultado = req.body.resultado
+    const id_ronda = req.body.ronda
+    const id_hora = req.body.hora
+
+    try {
+        const result = await db.query('INSERT INTO partido (id_torneo, id_pareja_one,id_pareja_two, fecha, resultado, id_ronda, id_horario) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *', [
+            id_torneo,  id_pareja_one, id_pareja_two, fecha, resultado, id_ronda, id_hora
+        ]);
+        res.json({success:true});
+    } catch (error) {
+        res.json({success:false});
+        console.log(error.message);
+    }
+}
+
+
 module.exports = {
     addMatch, GetSubtorneoMatchesById, 
     GetSubtorneoMatches, UpdateHorario, 
-    DeleteMatch
+    DeleteMatch, GetColoresMatches, addColoresMatch
 }

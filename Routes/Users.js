@@ -12,6 +12,7 @@ router.get('/api/getSingleUser/:idUser', GetUserById)
 router.get('/api/getUsersByApellido/:apellido', GetUserByName)
 
 router.put('/api/editUser/:idUser', UpdateUser)
-router.delete('/api/deleteUser/:idUser', DeleteUser)
+
+router.delete('/api/deleteUser/:id_user', DeleteUser)
 
 module.exports = router;

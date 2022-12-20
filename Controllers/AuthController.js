@@ -21,18 +21,18 @@ const Login = async (req, res) => {
             console.log(req.session);
             //console.log("Good Login!");
         }else{
-            res.json({loggedIn: false, status: "password"})
+            res.json({wrongPassword: true, status: "password"})
             console.log("Wrong password");
         }
     }else{
         console.log("Not good 2");
-        res.json({loggedIn: false, status: "wrong username"})
+        res.json({badUsername: true, status: "wrong username"})
     }
 }
 
 const SignUp = async (req, res) => {
     
-    const existingUser = await db.query('SELECT username from users where username = $1',
+    const existingUser = await db.query('SELECT username from users where LOWER(username) = $1',
     [req.body.username])
     if (existingUser.rowCount==0){
         const hashedPass = await bcrypt.hash(req.body.password, 10);
