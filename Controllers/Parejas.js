@@ -61,6 +61,19 @@ const DeletePareja = async (req, res) => {
         console.log(error.message);
     }
 }
+const DeleteColoresPareja = async (req, res) => {
+
+    const id_Pareja = req.params.idPareja;
+
+    try {
+        const result = await db.query('DELETE from parejascolores WHERE id_Pareja = $1 RETURNING *', [
+            id_Pareja
+        ]);
+        res.json(result.rows[0]);
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
 const GetAllParejas = async (req, res) => {
     try {
@@ -125,7 +138,7 @@ const getColoresParejasById = async (req, res) => {
     //console.log("id_pareja : " + id_pareja);
 
     try {
-        const result = await db.query(`select parejas.id_torneo, u.nombres, u.apellidos, 
+        const result = await db.query(`select parejas.id_torneo, u.nombres, u.apellidos, u.accion,
         parejas.id_pareja, parejas.id_equipo
         FROM parejascolores parejas
         JOIN users u ON parejas.id_user_one = u.id or parejas.id_user_two = u.id
@@ -175,10 +188,30 @@ const getPlayersByTeam = async (req, res) => {
     }
 }
 
+const MakeColoresInscripcion = async (req, res) => {
+    const id_torneo = req.body.id_torneo
+    const id_user_one = req.body.id_user_one
+    const id_user_two = req.body.id_user_two
+    const id_equipo = req.body.id_equipo;
+    /* console.log("id_equipo : " + id_equipo);
+    console.log("id_pareja : " + id_pareja); */
+
+    try {
+        const result = await db.query(`Insert into parejascolores(id_torneo, id_user_one, id_user_two, id_equipo) 
+        VALUES ($1, $2, $3, $4)
+        RETURNING * `, 
+        [id_torneo, id_user_one, id_user_two, id_equipo, ]);
+        console.log("RESULT : " + JSON.stringify(result.rows));
+        res.json(result.rows);
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 module.exports = {
     addSubtorneoPareja, GetAllParejas, 
     getSubtorneoParejas, UpdatePareja, 
     DeletePareja, addParejaMember, GetParejasMembers,
     GetColoresParejas, getColoresParejasById, SetEquipoToPareja,
-    getPlayersByTeam
+    getPlayersByTeam, DeleteColoresPareja, MakeColoresInscripcion
 }

@@ -1,15 +1,20 @@
 const {db} = require('../database');
 
 const addHorario = async (req, res) => {
+    const inicio = req.body.inicio 
+    console.log("inicio: " + inicio);
+    const fin = req.body.fin
+    console.log("fin: " + fin);
+    const hora_inicio = req.body.hora_inicio
+    console.log("hora_inicio: " + hora_inicio);
+
     
-    const name = req.body.nombre_Horario 
-    const category = req.body.id_categoriaHorario
-    const status = req.body.estatus_Horario
+    const estatus_horario = req.body.estatus_horario
     
 
     try {
-        const result = await db.query('INSERT INTO horarioscancha (nombre_Horario, id_categoriaHorario,estatus_Horario) VALUES ($1,$2,$3) RETURNING *', [
-            name,  category, status
+        const result = await db.query('INSERT INTO horarioscancha (inicio, fin, hora_inicio ,estatus_horario) VALUES ($1,$2,$3,$4) RETURNING *', [
+            inicio,  fin, hora_inicio, estatus_horario
         ]);
         res.json(result.rows[0]);
     } catch (error) {

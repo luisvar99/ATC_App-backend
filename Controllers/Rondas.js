@@ -2,14 +2,11 @@ const {db} = require('../database');
 
 const addRondas = async (req, res) => {
     
-    const name = req.body.nombre_cancha 
-    const category = req.body.id_categoriacancha
-    const status = req.body.estatus_cancha
-    
+    const nombre_ronda = req.body.nombre_ronda 
 
     try {
-        const result = await db.query('INSERT INTO rondas (nombre_cancha, id_categoriacancha,estatus_cancha) VALUES ($1,$2,$3) RETURNING *', [
-            name,  category, status
+        const result = await db.query('INSERT INTO rondas (nombre) VALUES ($1) RETURNING *', [
+            nombre_ronda,  
         ]);
         res.json(result.rows[0]);
     } catch (error) {
@@ -18,16 +15,14 @@ const addRondas = async (req, res) => {
 }
 const UpdateRondas = async (req, res) => {
     
-    const name = req.body.nombre_cancha;
-    const category = req.body.id_categoriacancha;
-    const status = req.body.estatus_cancha;
-    const id_cancha = req.params.idCancha;
+    const nombre_ronda = req.body.nombre_ronda;
+    const id_ronda = req.params.id_ronda;
 
     try {
-        const result = await db.query('UPDATE rondas set nombre_cancha=$1, id_categoriacancha=$2, estatus_cancha=$3 WHERE id_cancha = $4 RETURNING *', [
-            name,  category, status, id_cancha
+        const result = await db.query('UPDATE rondas set nombre=$1 WHERE id_ronda = $2 RETURNING *', [
+            nombre_ronda, id_ronda 
         ]);
-        res.json(result.rows);
+        res.json({success:true, result: result.rows[0]});
     } catch (error) {
         console.log(error.message);
     }
@@ -35,11 +30,11 @@ const UpdateRondas = async (req, res) => {
 
 const DeleteRondas = async (req, res) => {
 
-    const id_cancha = req.params.idCancha;
+    const id_ronda = req.params.id_ronda;
 
     try {
-        const result = await db.query('DELETE from rondas WHERE id_cancha = $1 RETURNING *', [
-            id_cancha
+        const result = await db.query('DELETE from rondas WHERE id_ronda = $1 RETURNING *', [
+            id_ronda
         ]);
         res.json(result.rows[0]);
     } catch (error) {
@@ -50,7 +45,7 @@ const DeleteRondas = async (req, res) => {
 const getAllrondas = async (req, res) => {
     try {
         const result = await db.query('SELECT * FROM rondas order by nombre');
-        //console.log("RESULT : " + JSON.stringify(result));
+        //console.log("Rondas : " + JSON.stringify(result));
         res.json(result.rows);
     } catch (error) {
         console.log(error.message);
@@ -58,11 +53,11 @@ const getAllrondas = async (req, res) => {
 }
 
 const GetRondasById = async (req, res) => {
-    const id = req.params.idCancha;
-    console.log(JSON.stringify(id));
+    const id_ronda = req.params.id_ronda;
+    //console.log(JSON.stringify(id));
     try {
-        const result = await db.query('SELECT * FROM rondas WHERE id_cancha = $1 ' , 
-        [id]);
+        const result = await db.query('SELECT * FROM rondas WHERE id_ronda = $1 ' , 
+        [id_ronda]);
         //console.log("RESULT : " + result);
         res.json(result.rows);
     } catch (error) {

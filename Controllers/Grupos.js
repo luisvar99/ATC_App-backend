@@ -271,6 +271,21 @@ const GetEquiposColores = async (req, res) => {
     }        
 }
 
+const PublishColoresTeams = async (req, res) => {
+    const id_torneo = req.params.id_torneo 
+    try {
+        const result = await db.query(`UPDATE equiposcolores SET "isPublicado" = 1  
+        WHERE id_torneo = $1 `, [
+            id_torneo])
+            
+        res.json(result.rows);
+        //console.log(result.rows);
+        } catch (error) {
+            res.json({success: 'Failed', error: error.message});
+            console.log(error.message);
+    }        
+}
+
 
 module.exports = {
     addGrupo, GetAllGrupos, 
@@ -279,5 +294,5 @@ module.exports = {
     DeleteSubTorneoGroupParticipant, GetGruposById,
     PublishGrupos, CreateColoresGrupo, GetColoresGrupo,
     CreateColoresEquipo, GetColoresTeamsByGroup,
-    GetEquiposColores
+    GetEquiposColores, PublishColoresTeams
 }
