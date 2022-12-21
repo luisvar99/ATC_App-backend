@@ -8,14 +8,16 @@ const addReservacion = async (req, res) => {
     const fecha = req.body.fecha
     const id_inv_uno = req.body.id_inv_uno
     const id_inv_dos = req.body.id_inv_dos
+    const descripcion = req.body.descripcion
     
 
     try {
-        const result = await db.query('INSERT INTO reserva (id_cancha, id_horario, id_socio, fecha, id_invitado_uno, id_invitado_dos) VALUES ($1,$2,$3, $4, $5, $6) RETURNING *', [
-            idCancha,  idHorario, idSocio, fecha, id_inv_uno, id_inv_dos
+        const result = await db.query('INSERT INTO reserva (id_cancha, id_horario, id_socio, fecha, id_invitado_uno, id_invitado_dos, descripcion) VALUES ($1,$2,$3, $4, $5, $6, $7) RETURNING *', [
+            idCancha,  idHorario, idSocio, fecha, id_inv_uno, id_inv_dos, descripcion
         ]);
         res.json(result.rows[0]);
     } catch (error) {
+        res.json({success:false});
         console.log(error.message);
     }
 }

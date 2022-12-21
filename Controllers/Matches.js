@@ -11,10 +11,11 @@ const addMatch = async (req, res) => {
     const fecha = req.body.fecha
     const hora = req.body.hora
     const ronda = req.body.ronda
+    const id_cancha = req.body.id_cancha
 
     try {
-        const result = await db.query('INSERT INTO partido (id_subtorneo, id_player_uno,id_player_dos, id_player_tres, id_player_cuatro, resultado, fecha, id_horario, id_ronda) VALUES ($1,$2,$3,$4,$5,$6,$7,$8, $9) RETURNING *', [
-            idSubtorneo,  id_player_uno, id_player_dos, id_player_tres, id_player_cuatro, resultado, fecha, hora, ronda
+        const result = await db.query('INSERT INTO partido (id_subtorneo, id_player_uno,id_player_dos, id_player_tres, id_player_cuatro, resultado, fecha, id_ronda, id_horario, id_cancha ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8, $9, $10) RETURNING *', [
+            idSubtorneo,  id_player_uno, id_player_dos, id_player_tres, id_player_cuatro, resultado, fecha, ronda, hora,  id_cancha
         ]);
         res.json({success:true});
     } catch (error) {
@@ -92,7 +93,7 @@ const GetSubtorneoMatches = async (req, res) => {
 }
 
 
-//QUERIES CON TONREO COLORES
+// --------------------------- QUERIES CON TONREO COLORES ---------------------------
 const GetColoresMatches = async (req, res) => {
     const id_torneo = req.params.id_torneo;
     console.log("GetSubtorneoMatches " + id);
@@ -109,17 +110,18 @@ const GetColoresMatches = async (req, res) => {
 
 const addColoresMatch = async (req, res) => {
     
-    const id_torneo = req.body.idSubtorneo
+    const id_torneo = req.body.id_torneo
     const id_pareja_one = req.body.id_pareja_one
     const id_pareja_two = req.body.id_pareja_two
     const fecha = req.body.fecha
     const resultado = req.body.resultado
-    const id_ronda = req.body.ronda
-    const id_hora = req.body.hora
+    const id_ronda = req.body.idRonda
+    const id_hora = req.body.IdHorario
+    const id_cancha = req.body.id_cancha
 
     try {
-        const result = await db.query('INSERT INTO partido (id_torneo, id_pareja_one,id_pareja_two, fecha, resultado, id_ronda, id_horario) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *', [
-            id_torneo,  id_pareja_one, id_pareja_two, fecha, resultado, id_ronda, id_hora
+        const result = await db.query('INSERT INTO partidocolores (id_torneo, id_pareja_one,id_pareja_two, fecha, resultado, id_ronda, id_horario, id_cancha) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *', [
+            id_torneo,  id_pareja_one, id_pareja_two, fecha, resultado, id_ronda, id_hora, id_cancha
         ]);
         res.json({success:true});
     } catch (error) {

@@ -196,7 +196,7 @@ const getPlayersByTeam = async (req, res) => {
         JOIN users u ON parejas.id_user_one = u.id OR parejas.id_user_two = u.id
         WHERE id_equipo = $1` , 
         [id_equipo]);
-        console.log("RESULT : " + JSON.stringify(result.rows));
+        //console.log("RESULT : " + JSON.stringify(result.rows));
         res.json(result.rows);
     } catch (error) {
         console.log(error.message);
@@ -216,7 +216,7 @@ const MakeColoresInscripcion = async (req, res) => {
         VALUES ($1, $2, $3, $4)
         RETURNING * `, 
         [id_torneo, id_user_one, id_user_two, id_equipo, ]);
-        console.log("RESULT : " + JSON.stringify(result.rows));
+        //console.log("RESULT : " + JSON.stringify(result.rows));
         res.json(result.rows);
     } catch (error) {
         console.log(error.message);

@@ -1,11 +1,12 @@
 const {Router} = require('express')
 const {addMatch, GetSubtorneoMatchesById, GetSubtorneoMatches, 
-    UpdateHorario, DeleteMatch, GetColoresMatches
+    UpdateHorario, DeleteMatch, GetColoresMatches, addColoresMatch
 } = require('../Controllers/Matches')
 
 const router = new Router();
 
 router.post('/api/createSubtorneoMatch', addMatch)
+router.post('/api/addColoresMatch', addColoresMatch)
 
 router.get('/api/GetSubtorneoMatchesById/:idPartido', GetSubtorneoMatchesById)
 router.get('/api/GetSubtorneoMatches/:idSubtorneo', GetSubtorneoMatches)
