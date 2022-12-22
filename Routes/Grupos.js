@@ -3,7 +3,8 @@ const {addGrupo, GetAllGrupos, getSubtorneoGrupos,
     UpdateGrupo, DeleteGrupo, addGrupoMember, GetGruposMembers,
     DeleteSubTorneoGroupParticipant, GetGruposById, PublishGrupos,
     CreateColoresGrupo, GetColoresGrupo, CreateColoresEquipo,
-    GetColoresTeamsByGroup, GetEquiposColores, PublishColoresTeams
+    GetColoresTeamsByGroup, GetEquiposColores, PublishColoresTeams,
+    DeleteColoresGrupo
 } = require('../Controllers/Grupos')
 
 const router = new Router();
@@ -26,6 +27,7 @@ router.put('/api/PublishGrupos/:idSubtorneo', PublishGrupos)
 router.put('/api/PublishColoresTeams/:id_torneo', PublishColoresTeams)
 
 router.delete('/api/deleteGrupo/idGrupo=:idGrupo', DeleteGrupo)
+router.delete('/api/DeleteColoresGrupo/:id_bombo', DeleteColoresGrupo)
 router.delete('/api/deleteSubTorneoGroupParticipant/idGrupo=:idGrupo/idUser=:idUser', DeleteSubTorneoGroupParticipant)
 
 module.exports = router;

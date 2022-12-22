@@ -189,6 +189,7 @@ const GetGruposById = async (req, res) => {
     }
 }
 
+//======================COLORES========================================
 
 const CreateColoresGrupo = async (req, res) => {
     const id_torneo = req.body.id_torneo 
@@ -286,6 +287,28 @@ const PublishColoresTeams = async (req, res) => {
     }        
 }
 
+const DeleteColoresGrupo = async (req, res) => {
+
+    const id_bombo = req.params.id_bombo;
+
+    try {
+        const result = await db.query('DELETE from bomboscolores WHERE id_bombo = $1 RETURNING *', [
+            id_bombo
+        ]);
+                    
+        /* const resultTwo = await db.query('DELETE from equiposcolores WHERE id_bombo = $1 RETURNING *', [
+            id_bombo
+        ]); */
+ 
+        /* const resultThree = await db.query('DELETE from equiposcolores WHERE id_bombo = $1 RETURNING *', [
+            id_bombo
+        ]); */
+        res.json({QueryUno: result.rows[0]/* , QueryDos: resultTwo.rows[0] */});
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 
 module.exports = {
     addGrupo, GetAllGrupos, 
@@ -294,5 +317,6 @@ module.exports = {
     DeleteSubTorneoGroupParticipant, GetGruposById,
     PublishGrupos, CreateColoresGrupo, GetColoresGrupo,
     CreateColoresEquipo, GetColoresTeamsByGroup,
-    GetEquiposColores, PublishColoresTeams
+    GetEquiposColores, PublishColoresTeams,
+    DeleteColoresGrupo
 }

@@ -25,22 +25,23 @@ const addTorneo = async (req, res) => {
     }
 }
 const UpdateTorneo = async (req, res) => {
-    //console.log(req.body)
-    //console.log(req.params)
+    /* console.log(req.body)
+    console.log(req.params) */
     const name = req.body.nombre_torneo
     const fecha_inicio = req.body.fecha_inicio
     const fecha_fin = req.body.fecha_fin
     const fecha_inicio_inscripcion = req.body.fecha_inicio_inscripcion
     const fecha_fin_inscripcion= req.body.fecha_fin_inscripcion
-    const id_categoria = req.body.id_categoria
+    const id_categoria = parseInt(req.body.id_categoria)
     const descripcion = req.body.descripcion
     const modalidad = req.body.modalidad
+    const is_colores = req.body.is_colores
 
     const id_torneo = req.params.idTorneo
 
     try {
-        const result = await db.query('UPDATE torneos SET nombre_torneo=$1, fecha_inicio=$2, fecha_fin=$3, fecha_inicio_inscripcion=$4, fecha_fin_inscripcion=$5, id_categoria=$6, descripcion=$7, modalidad=$8 WHERE id_torneo=$9 RETURNING *', [
-            name,  fecha_inicio, fecha_fin, fecha_inicio_inscripcion,fecha_fin_inscripcion, id_categoria, descripcion, modalidad, id_torneo
+        const result = await db.query('UPDATE torneos SET nombre_torneo=$1, fecha_inicio=$2, fecha_fin=$3, fecha_inicio_inscripcion=$4, fecha_fin_inscripcion=$5, id_categoria=$6, descripcion=$7, modalidad=$8, is_colores =$9 WHERE id_torneo=$10 RETURNING *', [
+            name,  fecha_inicio, fecha_fin, fecha_inicio_inscripcion,fecha_fin_inscripcion, id_categoria, descripcion, modalidad , is_colores, id_torneo
         ]);
         //console.log(result);
         res.json(result.rows);
@@ -75,15 +76,6 @@ const GetAllTorneos = async (req, res) => {
     }
 }
 
-const GetTorneoColores = async (req, res) => {
-    try {
-        const result = await db.query('SELECT * FROM torneos where (fecha_fin > CURRENT_DATE) AND is_colores=true');
-        //console.log("RESULT : " + JSON.stringify(result));
-        res.json(result.rows[0]);
-    } catch (error) {
-        console.log(error.message);
-    }
-}
 
 const GetTorneoById = async (req, res) => {
     const id = req.params.idTorneo;
@@ -98,6 +90,44 @@ const GetTorneoById = async (req, res) => {
     }
 }
 
+//============================COLORES============================
+
+const GetTorneoColores = async (req, res) => {
+    try {
+        const result = await db.query('SELECT * FROM torneos where (fecha_fin > CURRENT_DATE) AND is_colores=true');
+        //console.log("RESULT : " + JSON.stringify(result));
+        res.json(result.rows[0]);
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const UpdateTorneoColores = async (req, res) => {
+    //console.log(req.body)
+    //console.log(req.params)
+    const name = req.body.nombre_torneo
+    const fecha_inicio = req.body.fecha_inicio
+    const fecha_fin = req.body.fecha_fin
+    const fecha_inicio_inscripcion = req.body.fecha_inicio_inscripcion
+    const fecha_fin_inscripcion= req.body.fecha_fin_inscripcion
+    const id_categoria = req.body.id_categoria
+    const descripcion = req.body.descripcion
+    const modalidad = req.body.modalidad
+
+    const id_torneo = req.params.idTorneo
+
+    try {
+        const result = await db.query('UPDATE torneos SET nombre_torneo=$1, fecha_inicio=$2, fecha_fin=$3, fecha_inicio_inscripcion=$4, fecha_fin_inscripcion=$5, id_categoria=$6, descripcion=$7, modalidad=$8 WHERE id_torneo=$9 AND is_colores=true RETURNING *', [
+            name,  fecha_inicio, fecha_fin, fecha_inicio_inscripcion,fecha_fin_inscripcion, id_categoria, descripcion, modalidad, id_torneo
+        ]);
+        //console.log(result);
+        res.json(result.rows);
+        //res.json({success: true});
+    } catch (error) {
+        res.json({success: error.message});
+        console.log(error.message);
+    }
+}
 
 module.exports = {
     addTorneo, GetAllTorneos, 
