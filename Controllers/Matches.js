@@ -96,12 +96,32 @@ const GetSubtorneoMatches = async (req, res) => {
 // --------------------------- QUERIES CON TONREO COLORES ---------------------------
 const GetColoresMatches = async (req, res) => {
     const id_torneo = req.params.id_torneo;
-    console.log("GetSubtorneoMatches " + id);
+    //console.log("GetSubtorneoMatches " + id);
     try {
-        const result = await db.query(`select * from partidocolores
-        WHERE id_torneo = $1 
-        Order by id_partido` , 
+        const result = await db.query(`SELECT * from partidocolores
+        WHERE id_torneo = $1`,
         [id_torneo]);
+        res.json(result.rows);
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const GetColoresEnfretamientosPlayers = async (req, res) => {
+    const id_torneo = req.params.id_torneo;
+    const id_partido = req.params.id_partido;
+    //console.log("GetSubtorneoMatches " + id);
+    try {
+        const result = await db.query(`SELECT pc.id_partido, u.nombres, u.apellidos, 
+        u.accion, pc.fecha, r.nombre, parejas.id_pareja, ec.color
+        FROM parejascolores parejas
+        JOIN users u ON parejas.id_user_one = u.id OR parejas.id_user_two = u.id
+        JOIN partidocolores pc ON pc.id_pareja_one = parejas.id_pareja OR pc.id_pareja_two = parejas.id_pareja 
+        JOIN rondas r ON r.id_ronda = pc.id_ronda
+        JOIN equiposcolores ec ON ec.id_equipo = parejas.id_equipo
+        WHERE pc.id_torneo = $1 AND pc.id_partido = $2
+        ORDER BY parejas.id_pareja, pc.fecha` , 
+        [id_torneo, id_partido]);
         res.json(result.rows);
     } catch (error) {
         console.log(error.message);
@@ -134,5 +154,6 @@ const addColoresMatch = async (req, res) => {
 module.exports = {
     addMatch, GetSubtorneoMatchesById, 
     GetSubtorneoMatches, UpdateHorario, 
-    DeleteMatch, GetColoresMatches, addColoresMatch
+    DeleteMatch, GetColoresMatches, addColoresMatch,
+    GetColoresEnfretamientosPlayers
 }
