@@ -205,6 +205,22 @@ const CreateColoresGrupo = async (req, res) => {
             console.log(error.message);
     }        
 }
+const UpdateColoresGrupo = async (req, res) => {
+    const id_bombo = req.params.id_bombo 
+    const id_torneo = req.body.id_torneo 
+    const nombre_bombo = req.body.nombre_bombo 
+    //console.log("numberOfGroups: " + typeof(numberOfGroups));
+    try {
+        const result = await db.query(`UPDATE bomboscolores SET nombre_bombo = $1 
+        WHERE id_bombo = $2 RETURNING *`, [
+            nombre_bombo, id_bombo])
+            
+        res.json({success:true, result: result.rows[0]});
+        } catch (error) {
+            res.json({success: 'Failed', error: error.message});
+            console.log(error.message);
+    }        
+}
 
 const CreateColoresEquipo = async (req, res) => {
     const nombre_equipo = req.body.nombre_equipo 
@@ -272,6 +288,37 @@ const GetEquiposColores = async (req, res) => {
     }        
 }
 
+const getColoresEquipoById = async (req, res) => {
+    const id_torneo = req.params.id_torneo 
+    const id_equipo = req.params.id_equipo 
+    try {
+        const result = await db.query(`SELECT * from equiposcolores 
+        WHERE id_torneo = $1 AND id_equipo = $2`, [
+            id_torneo, id_equipo])
+            
+        res.json(result.rows);
+        //console.log(result.rows);
+        } catch (error) {
+            res.json({success: 'Failed', error: error.message});
+            console.log(error.message);
+    }        
+}
+
+const getColoresGrupoById = async (req, res) => {
+    const id_bombo = req.params.id_bombo 
+    try {
+        const result = await db.query(`SELECT * from bomboscolores 
+        WHERE id_bombo = $1`, [
+            id_bombo])
+            
+        res.json(result.rows);
+        //console.log(result.rows);
+        } catch (error) {
+            res.json({success: 'Failed', error: error.message});
+            console.log(error.message);
+    }        
+}
+
 const PublishColoresTeams = async (req, res) => {
     const id_torneo = req.params.id_torneo 
     try {
@@ -295,15 +342,44 @@ const DeleteColoresGrupo = async (req, res) => {
         const result = await db.query('DELETE from bomboscolores WHERE id_bombo = $1 RETURNING *', [
             id_bombo
         ]);
-                    
-        /* const resultTwo = await db.query('DELETE from equiposcolores WHERE id_bombo = $1 RETURNING *', [
-            id_bombo
-        ]); */
- 
-        /* const resultThree = await db.query('DELETE from equiposcolores WHERE id_bombo = $1 RETURNING *', [
-            id_bombo
-        ]); */
         res.json({QueryUno: result.rows[0]/* , QueryDos: resultTwo.rows[0] */});
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+const DeleteColoresEquipo = async (req, res) => {
+
+    const id_equipo = req.params.id_equipo;
+
+    try {
+        const result = await db.query('DELETE from equiposcolores WHERE id_equipo = $1 RETURNING *', [
+            id_equipo
+        ]);
+        const deleteResult = await db.query(`DELETE from parejascolores
+        WHERE id_equipo = $1 RETURNING *`, [
+            id_equipo
+        ]);
+        res.json({QueryUno: result.rows[0], QueryDos: deleteResult.rows[0]});
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const UpdateColoresEquipo = async (req, res) => {
+
+    const nombre_equipo = req.body.nombre_equipo;
+    const id_bombo = req.body.id_bombo;
+    const id_torneo = req.body.id_torneo;
+    const ispublicado = req.body.ispublicado;
+    const color = req.body.color;
+    const id_equipo = req.params.id_equipo
+
+    try {
+        const result = await db.query(`UPDATE equiposcolores set nombre_equipo = $1, id_bombo = $2, id_torneo = $3, "isPublicado" = $4, color = $5 
+        WHERE id_equipo = $6 AND id_torneo = $7 RETURNING *`, [
+            nombre_equipo, id_bombo, id_torneo, ispublicado, color, id_equipo, id_torneo
+        ]);
+        res.json({QueryUno: result.rows[0]});
     } catch (error) {
         console.log(error.message);
     }
@@ -318,5 +394,7 @@ module.exports = {
     PublishGrupos, CreateColoresGrupo, GetColoresGrupo,
     CreateColoresEquipo, GetColoresTeamsByGroup,
     GetEquiposColores, PublishColoresTeams,
-    DeleteColoresGrupo
+    DeleteColoresGrupo, getColoresEquipoById,
+    UpdateColoresEquipo, DeleteColoresEquipo,
+    UpdateColoresGrupo, getColoresGrupoById
 }

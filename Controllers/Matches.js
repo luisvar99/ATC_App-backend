@@ -114,12 +114,13 @@ const GetColoresEnfretamientosPlayers = async (req, res) => {
     //console.log("GetSubtorneoMatches " + id);
     try {
         const result = await db.query(`SELECT pc.id_partido, u.nombres, u.apellidos, 
-        u.accion, pc.fecha, r.nombre, parejas.id_pareja, ec.color
+        u.accion, pc.fecha, r.nombre, parejas.id_pareja, ec.color, can.nombre_cancha
         FROM parejascolores parejas
         JOIN users u ON parejas.id_user_one = u.id OR parejas.id_user_two = u.id
         JOIN partidocolores pc ON pc.id_pareja_one = parejas.id_pareja OR pc.id_pareja_two = parejas.id_pareja 
         JOIN rondas r ON r.id_ronda = pc.id_ronda
         JOIN equiposcolores ec ON ec.id_equipo = parejas.id_equipo
+        JOIN canchas can ON can.id_cancha = pc.id_cancha
         WHERE pc.id_torneo = $1 AND pc.id_partido = $2
         ORDER BY parejas.id_pareja, pc.fecha` , 
         [id_torneo, id_partido]);
