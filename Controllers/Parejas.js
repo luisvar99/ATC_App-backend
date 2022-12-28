@@ -53,7 +53,7 @@ const DeletePareja = async (req, res) => {
     const id_Pareja = req.params.idPareja;
 
     try {
-        const result = await db.query('DELETE from subtorneoParejas WHERE id_Pareja = $1 RETURNING *', [
+        const result = await db.query('DELETE from parejas WHERE id_Pareja = $1 RETURNING *', [
             id_Pareja
         ]);
         res.json(result.rows[0]);
@@ -61,6 +61,23 @@ const DeletePareja = async (req, res) => {
         console.log(error.message);
     }
 }
+
+const DeleteSubTorneoPareja = async (req, res) => {
+
+    const id_Pareja = req.params.idPareja;
+    const id_subtorneo = req.params.id_subtorneo;
+
+    try {
+        const result = await db.query('DELETE from parejas WHERE id_Pareja = $1 AND id_subtorneo = $2 RETURNING *', [
+            id_Pareja, id_subtorneo
+        ]);
+        res.json(result.rows[0]);
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
 const DeleteColoresPareja = async (req, res) => {
 
     const id_Pareja = req.params.idPareja;
@@ -226,7 +243,7 @@ const MakeColoresInscripcion = async (req, res) => {
 module.exports = {
     addSubtorneoPareja, GetAllParejas, 
     getSubtorneoParejas, UpdatePareja, 
-    DeletePareja, addParejaMember, GetParejasMembers,
+    DeletePareja, DeleteSubTorneoPareja, addParejaMember, GetParejasMembers,
     GetColoresParejas, getColoresParejasById, SetEquipoToPareja,
     getPlayersByTeam, DeleteColoresPareja, MakeColoresInscripcion,
     GetColoresParejasMoreInfo

@@ -134,7 +134,7 @@ const GetAllGrupos = async (req, res) => {
 
 const getSubtorneoGrupos = async (req, res) => {
     const idSubTorneo = req.params.idSubtorneo;
-    console.log("getSubtorneoGrupos:" + idSubTorneo);
+    //console.log("getSubtorneoGrupos:" + idSubTorneo);
     try {
         const result = await db.query('SELECT * FROM subtorneogrupos WHERE id_subtorneo = $1 ORDER BY numero_grupo' , 
         [idSubTorneo]);
@@ -244,7 +244,7 @@ const GetColoresGrupo = async (req, res) => {
     const id_torneo = req.params.id_torneo 
     //console.log("id_torneo" + id_torneo);
     try {
-        const result = await db.query(`SELECT * FROM bomboscolores WHERE id_torneo = $1 `, [
+        const result = await db.query(`SELECT * FROM bomboscolores WHERE id_torneo = $1 ORDER BY nombre_bombo`, [
             id_torneo])
             
         res.json(result.rows);

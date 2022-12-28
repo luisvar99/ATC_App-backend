@@ -55,6 +55,7 @@ const DeleteSubTorneo = async (req, res) => {
 
 const DeleteSubTorneoParticipant = async (req, res) => {
 
+    console.log(req.params);
     const id_SubTorneo = req.params.idSubTorneo;
     const user_id = req.params.user_id;
 

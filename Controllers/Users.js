@@ -39,14 +39,23 @@ const addUser = async (req, res) => {
 }
 const UpdateUser = async (req, res) => {
     
-    const name = req.body.nombre_cancha;
-    const category = req.body.id_categoriacancha;
-    const status = req.body.estatus_cancha;
-    const id_cancha = req.params.idCancha;
+    const username = req.body.username;
+    const password = req.body.password;
+    const nombres = req.body.nombres;
+    const apellidos = req.body.apellidos;
+    const cedula = req.body.cedula;
+    const accion = req.body.accion;
+    const fecha_nacimiento = req.body.fecha_nacimiento;
+    const correo_electronico = req.body.correo_electronico;
+    const sexo = req.body.sexo;
+    const rol = req.body.role;
+    const user_id = req.params.user_id;
 
     try {
-        const result = await db.query('UPDATE canchas set nombre_cancha=$1, id_categoriacancha=$2, estatus_cancha=$3 WHERE id_cancha = $4 RETURNING *', [
-            name,  category, status, id_cancha
+        const result = await db.query(`UPDATE users set username=$1, nombres=$2, apellidos=$3, 
+        cedula=$4, accion=$5, fecha_nacimiento=$6, correo_electronico=$7, sexo=$8, rol=$9
+        WHERE id = $10 RETURNING *`, [
+            username, nombres, apellidos,cedula , accion,fecha_nacimiento , correo_electronico,sexo, rol, user_id
         ]);
         res.json(result.rows);
     } catch (error) {
@@ -79,12 +88,11 @@ const GetAllUsers = async (req, res) => {
 }
 
 const GetUserById = async (req, res) => {
-    const id = req.params.idCancha;
-    console.log(JSON.stringify(id));
+    const id = req.params.user_id;
     try {
         const result = await db.query('SELECT * FROM users WHERE id = $1 ' , 
         [id]);
-        //console.log("RESULT : " + result);
+        console.log(result.rows);
         res.json(result.rows);
     } catch (error) {
         console.log(error.message);

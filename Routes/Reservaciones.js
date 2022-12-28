@@ -9,9 +9,9 @@ router.post('/api/createReservation', addReservacion)
 
 router.get('/api/GetCanchaReservaciones/:idCancha/:fecha', GetCanchaReservaciones)
 router.get('/api/GetReservaOwner/:id_horario', GetReservaOwner)
-router.get('/api/GetReservaDetails/:idReserva', GetReservaDetails)
+router.get('/api/GetReservaDetails/:idReserva/:id_socio', GetReservaDetails)
 
-router.put('/api/editHorario/:idHorario', UpdateReservacion)
+router.put('/api/updateReservation/:id_reserva', UpdateReservacion)
 
 router.delete('/api/deleteReserva/:idReservacion', DeleteReservacion)
 

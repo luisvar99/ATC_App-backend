@@ -114,7 +114,8 @@ const GetColoresEnfretamientosPlayers = async (req, res) => {
     //console.log("GetSubtorneoMatches " + id);
     try {
         const result = await db.query(`SELECT pc.id_partido, u.nombres, u.apellidos, 
-        u.accion, pc.fecha, r.nombre, parejas.id_pareja, ec.color, can.nombre_cancha
+        u.accion, pc.fecha, r.nombre, parejas.id_pareja, ec.color, can.nombre_cancha,
+        pc.resultado
         FROM parejascolores parejas
         JOIN users u ON parejas.id_user_one = u.id OR parejas.id_user_two = u.id
         JOIN partidocolores pc ON pc.id_pareja_one = parejas.id_pareja OR pc.id_pareja_two = parejas.id_pareja 
@@ -136,7 +137,8 @@ const GetColoresMatchById = async (req, res) => {
     //console.log("GetSubtorneoMatches " + id);
     try {
         const result = await db.query(`SELECT pc.id_partido, u.nombres, u.apellidos, 
-        pc.fecha, r.nombre, parejas.id_pareja, pc.resultado, hc.inicio, can.nombre_cancha
+        pc.fecha, r.nombre, parejas.id_pareja, pc.resultado, hc.inicio, can.nombre_cancha,
+        r.id_ronda, hc.id_horario, can.id_cancha
         FROM parejascolores parejas
         JOIN users u ON parejas.id_user_one = u.id OR parejas.id_user_two = u.id
         JOIN partidocolores pc ON pc.id_pareja_one = parejas.id_pareja OR pc.id_pareja_two = parejas.id_pareja 
@@ -177,10 +179,41 @@ const addColoresMatch = async (req, res) => {
 const DeleteColoresEnfrentamiento = async (req, res) => {
 
     const id_partido = req.params.id_partido;
+    const id_cancha = req.params.id_cancha;
+    const id_horario = req.params.id_horario;
+    const fecha = req.params.fecha;
+    //console.log(req.params);
 
     try {
         const result = await db.query('DELETE from partidocolores WHERE id_partido = $1 RETURNING *', [
             id_partido
+        ]);
+        const resultReserva = await db.query(`DELETE from reserva 
+        WHERE id_cancha = $1 AND id_horario = $2 AND fecha = $3  RETURNING *`, [
+            id_cancha, id_horario, fecha
+        ]);
+
+        res.json({quno: result.rows, qdos: resultReserva.rows});
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const editColoresMatch = async (req, res) => {
+
+    const id_partido = req.params.id_partido
+    const id_pareja_one = req.body.id_pareja_one
+    const id_pareja_two = req.body.id_pareja_two
+    const fecha = req.body.fecha
+    const resultado = req.body.resultado
+    const id_ronda = req.body.id_ronda
+    const id_hora = req.body.id_horario
+    const id_cancha = req.body.id_cancha
+
+    try {
+        const result = await db.query(`UPDATE partidocolores SET id_pareja_one = $1, id_pareja_two = $2, fecha = $3, resultado = $4, id_ronda = $5, id_horario = $6, id_cancha = $7
+        WHERE id_partido = $8 RETURNING *`, [
+            id_pareja_one, id_pareja_two,fecha, resultado, id_ronda, id_hora, id_cancha, id_partido
         ]);
         res.json(result.rows)
     } catch (error) {
@@ -193,5 +226,5 @@ module.exports = {
     GetSubtorneoMatches, UpdateHorario, 
     DeleteMatch, GetColoresMatches, addColoresMatch,
     GetColoresEnfretamientosPlayers,DeleteColoresEnfrentamiento,
-    GetColoresMatchById
+    GetColoresMatchById, editColoresMatch
 }
