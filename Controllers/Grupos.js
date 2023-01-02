@@ -387,10 +387,9 @@ const UpdateColoresEquipo = async (req, res) => {
 
 
 module.exports = {
-    addGrupo, GetAllGrupos, 
-    getSubtorneoGrupos, UpdateGrupo, 
-    DeleteGrupo, addGrupoMember, GetGruposMembers,
-    DeleteSubTorneoGroupParticipant, GetGruposById,
+    addGrupo, GetAllGrupos, getSubtorneoGrupos, 
+    UpdateGrupo, DeleteGrupo, addGrupoMember, 
+    GetGruposMembers, DeleteSubTorneoGroupParticipant, GetGruposById,
     PublishGrupos, CreateColoresGrupo, GetColoresGrupo,
     CreateColoresEquipo, GetColoresTeamsByGroup,
     GetEquiposColores, PublishColoresTeams,
