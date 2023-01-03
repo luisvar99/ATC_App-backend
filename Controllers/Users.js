@@ -40,7 +40,6 @@ const addUser = async (req, res) => {
 const UpdateUser = async (req, res) => {
     
     const username = req.body.username;
-    const password = req.body.password;
     const nombres = req.body.nombres;
     const apellidos = req.body.apellidos;
     const cedula = req.body.cedula;
@@ -112,9 +111,30 @@ const GetUserByName = async (req, res) => {
     }
 }
 
+const ChangePassword = async (req, res) => {
+
+    const password = req.body.password;
+    const user_id = req.params.user_id;
+
+    const hashedPass = await bcrypt.hash(password, 10);
+
+    console.log((req.body));
+    console.log((hashedPass));
+
+    try {
+        const result = await db.query(`UPDATE users set passhash = $1
+        WHERE id = $2 RETURNING *`, 
+        [hashedPass, user_id]);
+        res.json(result.rows);
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 
 module.exports = {
     addUser, GetAllUsers, 
     GetUserById, UpdateUser, 
-    DeleteUser, GetUserByName
+    DeleteUser, GetUserByName,
+    ChangePassword
 }
