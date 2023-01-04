@@ -56,7 +56,7 @@ const DeleteMatch = async (req, res) => {
 
 const GetSubtorneoMatchesById = async (req, res) => {
     const idPartido = req.params.idPartido;
-    console.log("idPartido " + idPartido);
+    //console.log("idPartido " + idPartido);
 
     try {
         const result = await db.query(`select u.nombres, u.apellidos, part.id_partido, part.fecha, 
@@ -80,7 +80,7 @@ const GetSubtorneoMatchesById = async (req, res) => {
 
 const GetSubtorneoMatches = async (req, res) => {
     const id = req.params.idSubtorneo;
-    console.log("GetSubtorneoMatches " + id);
+    //console.log("GetSubtorneoMatches " + id);
     try {
         const result = await db.query(`select * from partido
         WHERE id_subtorneo = $1 

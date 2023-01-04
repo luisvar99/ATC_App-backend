@@ -2,6 +2,7 @@ const {db} = require('../database');
 
 const addReservacion = async (req, res) => {
     console.log("Creando reservacion");
+    console.log(req.body);
     const idCancha = req.body.idCancha 
     const idHorario = req.body.idHorario
     const idSocio = req.body.idSocio
