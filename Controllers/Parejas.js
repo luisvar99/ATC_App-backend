@@ -78,13 +78,28 @@ const DeleteSubTorneoPareja = async (req, res) => {
 }
 
 
-const DeleteColoresPareja = async (req, res) => {
+/* const DeleteColoresPareja = async (req, res) => {
 
     const id_Pareja = req.params.idPareja;
 
     try {
         const result = await db.query('DELETE from parejascolores WHERE id_Pareja = $1 RETURNING *', [
             id_Pareja
+        ]);
+        res.json(result.rows[0]);
+    } catch (error) {
+        console.log(error.message);
+    }
+} */
+
+const DeleteColoresParticipante = async (req, res) => {
+
+    const id_Pareja = req.params.idPareja;
+    const id_torneo = req.params.id_torneo;
+
+    try {
+        const result = await db.query('DELETE from participantescolores WHERE user_id = $1 AND id_torneo = $2 RETURNING *', [
+            id_Pareja, id_torneo
         ]);
         res.json(result.rows[0]);
     } catch (error) {
@@ -136,7 +151,7 @@ const GetParejasMembers = async (req, res) => {
     }
 }
 
-const GetColoresParejas = async (req, res) => {
+/* const GetColoresParejas = async (req, res) => {
     const id_torneo = req.params.id_torneo;
     //console.log("id_torneo : " + id_torneo);
     try {
@@ -146,18 +161,51 @@ const GetColoresParejas = async (req, res) => {
     } catch (error) {
         console.log(error.message);
     }
+} */
+const getColoresParticipantes = async (req, res) => {
+    const id_torneo = req.params.id_torneo;
+    //console.log("id_torneo : " + id_torneo);
+    try {
+        const result = await db.query(`SELECT u.id, u.nombres, u.apellidos, u.accion 
+        FROM participantescolores pc
+        JOIN users u ON u.id = pc.user_id
+        WHERE id_torneo = $1 ORDER BY u.apellidos` , 
+        [id_torneo]);
+        res.json(result.rows);
+    } catch (error) {
+        console.log(error.message);
+    }
 }
 
-const GetColoresParejasMoreInfo = async (req, res) => {
+/* const GetColoresParejasMoreInfo = async (req, res) => {
     const id_torneo = req.params.id_torneo;
     //console.log("id_torneo : " + id_torneo);
 
     try {
-        const result = await db.query(`SELECT u.nombres, u.apellidos, u.accion, parejas.id_pareja 
+        const result = await db.query(`SELECT u.nombres, u.apellidos, u.accion, parejas.id_pareja, eq.nombre_equipo, u.id
         FROM parejascolores parejas
         JOIN users u ON parejas.id_user_one = u.id OR parejas.id_user_two = u.id
+        JOIN equiposcolores eq ON eq.id_equipo = parejas.id_equipo
         WHERE parejas.id_torneo = $1
         ORDER BY id_pareja` , 
+        [id_torneo]);
+        res.json(result.rows);
+    } catch (error) {
+        console.log(error.message);
+    }
+} */
+
+const GetColoresParticipantesMoreInfo = async (req, res) => {
+    const id_torneo = req.params.id_torneo;
+    //console.log("id_torneo : " + id_torneo);
+
+    try {
+        const result = await db.query(`SELECT u.nombres, u.apellidos, u.accion, eq.nombre_equipo, u.id
+        FROM participantescolores pc
+        JOIN users u ON pc.user_id = u.id
+        JOIN equiposcolores eq ON eq.id_equipo = pc.id_equipo
+        WHERE pc.id_torneo = $1
+        ORDER BY eq.nombre_equipo` , 
         [id_torneo]);
         res.json(result.rows);
     } catch (error) {
@@ -185,11 +233,11 @@ const getColoresParejasById = async (req, res) => {
     }
 }
 
-const SetEquipoToPareja = async (req, res) => {
+/* const SetEquipoToPareja = async (req, res) => {
     const id_equipo = req.body.id_equipo;
     const id_pareja = req.params.id_pareja;
-    /* console.log("id_equipo : " + id_equipo);
-    console.log("id_pareja : " + id_pareja); */
+    console.log("id_equipo : " + id_equipo);
+    console.log("id_pareja : " + id_pareja);
 
     try {
         const result = await db.query(`UPDATE parejascolores SET id_equipo = $1
@@ -200,12 +248,30 @@ const SetEquipoToPareja = async (req, res) => {
     } catch (error) {
         console.log(error.message);
     }
-}
+} */
 
-const getPlayersByTeam = async (req, res) => {
-    const id_equipo = req.params.id_equipo;
+const SetEquipoToParticipante = async (req, res) => {
+    const id_equipo = req.body.id_equipo;
+    const user_id = req.params.user_id;
+    const id_torneo = req.params.id_torneo;
     /* console.log("id_equipo : " + id_equipo);
     console.log("id_pareja : " + id_pareja); */
+
+    try {
+        const result = await db.query(`UPDATE participantescolores SET id_equipo = $1
+        WHERE user_id = $2 AND id_torneo = $3` , 
+        [id_equipo, user_id, id_torneo]);
+        //console.log("RESULT : " + JSON.stringify(result));
+        res.json(result.rows);
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+/* const getPlayersByTeam = async (req, res) => {
+    const id_equipo = req.params.id_equipo;
+    console.log("id_equipo : " + id_equipo);
+    console.log("id_pareja : " + id_pareja);
 
     try {
         const result = await db.query(`SELECT u.nombres, u.apellidos, u.accion, parejas.id_pareja
@@ -218,15 +284,32 @@ const getPlayersByTeam = async (req, res) => {
     } catch (error) {
         console.log(error.message);
     }
+} */
+
+const getPlayersByTeam = async (req, res) => {
+    const id_equipo = req.params.id_equipo;
+    console.log("id_equipo : " + id_equipo);
+
+    try {
+        const result = await db.query(`SELECT u.nombres, u.apellidos, u.accion, u.id
+        FROM participantescolores pc
+        JOIN users u ON u.id = pc.user_id
+        WHERE id_equipo = $1` , 
+        [id_equipo]);
+        //console.log("RESULT : " + JSON.stringify(result.rows));
+        res.json(result.rows);
+    } catch (error) {
+        console.log(error.message);
+    }
 }
 
-const MakeColoresInscripcion = async (req, res) => {
+/* const MakeColoresInscripcion = async (req, res) => {
     const id_torneo = req.body.id_torneo
     const id_user_one = req.body.id_user_one
     const id_user_two = req.body.id_user_two
     const id_equipo = req.body.id_equipo;
-    /* console.log("id_equipo : " + id_equipo);
-    console.log("id_pareja : " + id_pareja); */
+    console.log("id_equipo : " + id_equipo);
+    console.log("id_pareja : " + id_pareja);
 
     try {
         const result = await db.query(`Insert into parejascolores(id_torneo, id_user_one, id_user_two, id_equipo) 
@@ -238,13 +321,32 @@ const MakeColoresInscripcion = async (req, res) => {
     } catch (error) {
         console.log(error.message);
     }
+} */
+
+const MakeColoresInscripcion = async (req, res) => {
+    const id_torneo = req.body.id_torneo
+    const user_id = req.body.user_id
+    /* console.log("id_equipo : " + id_equipo);
+    console.log("id_pareja : " + id_pareja); */
+
+    try {
+        const result = await db.query(`Insert into participantescolores(id_torneo, user_id) 
+        VALUES ($1, $2)
+        RETURNING * `, 
+        [id_torneo, user_id]);
+        //console.log("RESULT : " + JSON.stringify(result.rows));
+        res.json(result.rows);
+    } catch (error) {
+        console.log(error.message);
+    }
 }
 
 module.exports = {
     addSubtorneoPareja, GetAllParejas, 
     getSubtorneoParejas, UpdatePareja, 
     DeletePareja, DeleteSubTorneoPareja, addParejaMember, GetParejasMembers,
-    GetColoresParejas, getColoresParejasById, SetEquipoToPareja,
-    getPlayersByTeam, DeleteColoresPareja, MakeColoresInscripcion,
-    GetColoresParejasMoreInfo
+    /* GetColoresParejas */ getColoresParejasById, /* SetEquipoToPareja, */
+    getPlayersByTeam, /* DeleteColoresPareja, */ MakeColoresInscripcion,
+    /* GetColoresParejasMoreInfo, */ getColoresParticipantes, DeleteColoresParticipante,
+    SetEquipoToParticipante, GetColoresParticipantesMoreInfo
 }
