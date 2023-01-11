@@ -13,12 +13,14 @@ const addReservacion = async (req, res) => {
     
 
     try {
-        const checkReservation = await db.query('SELECT * FROM reserva WHERE fecha = $1 AND id_socio = $2 ', [
+        const checkReservation = await db.query(`SELECT * FROM reserva r
+        JOIN users u ON r.id_socio = u.id 
+        WHERE r.fecha = $1 AND id_socio = $2 AND u.rol != 'ADMIN' `, [
             fecha, idSocio
         ]);
 
         if(checkReservation.rowCount>=2){
-            res.json({validReservation: false, error: "exceed"});
+            res.json({validReservation: false, success: false});
         }else{
             const result = await db.query('INSERT INTO reserva (id_cancha, id_horario, id_socio, fecha, id_invitado_uno, id_invitado_dos, descripcion) VALUES ($1,$2,$3, $4, $5, $6, $7) RETURNING *', [
                 idCancha,  idHorario, idSocio, fecha, id_inv_uno, id_inv_dos, descripcion
@@ -56,9 +58,8 @@ const UpdateReservacion = async (req, res) => {
 }
 
 const DeleteReservacion = async (req, res) => {
-
     const id_Reservacion = req.params.idReservacion;
-
+    console.log(id_Reservacion);
     try {
         const result = await db.query('DELETE from reserva WHERE id_reserva = $1 RETURNING *', [
             id_Reservacion

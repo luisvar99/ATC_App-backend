@@ -254,6 +254,22 @@ const GetColoresGrupo = async (req, res) => {
     }        
 }
 
+const GetColoresGrupoForUsers = async (req, res) => {
+    const id_torneo = req.params.id_torneo 
+    //console.log("id_torneo" + id_torneo);
+    try {
+        const result = await db.query(`SELECT * FROM bomboscolores 
+        WHERE id_torneo = $1 AND ispublicado=1
+        ORDER BY nombre_bombo`, [
+            id_torneo])
+            
+        res.json(result.rows);
+        } catch (error) {
+            res.json({success: 'Failed', error: error.message});
+            console.log(error.message);
+    }        
+}
+
 const GetColoresTeamsByGroup = async (req, res) => {
     const id_bombo = req.params.id_bombo 
     //console.log("id_bombo" + id_bombo);
@@ -319,17 +335,20 @@ const getColoresGrupoById = async (req, res) => {
     }        
 }
 
-const PublishColoresTeams = async (req, res) => {
+const PublishColoresTeamsAndGroups = async (req, res) => {
     const id_torneo = req.params.id_torneo 
     try {
         const result = await db.query(`UPDATE equiposcolores SET "isPublicado" = 1  
         WHERE id_torneo = $1 `, [
             id_torneo])
-            
-        res.json(result.rows);
+        const resultTwo = await db.query(`UPDATE bomboscolores SET "ispublicado" = 1  
+        WHERE id_torneo = $1 `, [
+            id_torneo])
+        
+        res.json({result: result.rows, success: true});
         //console.log(result.rows);
         } catch (error) {
-            res.json({success: 'Failed', error: error.message});
+            res.json({success: false, error: error.message});
             console.log(error.message);
     }        
 }
@@ -392,8 +411,8 @@ module.exports = {
     GetGruposMembers, DeleteSubTorneoGroupParticipant, GetGruposById,
     PublishGrupos, CreateColoresGrupo, GetColoresGrupo,
     CreateColoresEquipo, GetColoresTeamsByGroup,
-    GetEquiposColores, PublishColoresTeams,
+    GetEquiposColores, PublishColoresTeamsAndGroups,
     DeleteColoresGrupo, getColoresEquipoById,
     UpdateColoresEquipo, DeleteColoresEquipo,
-    UpdateColoresGrupo, getColoresGrupoById
+    UpdateColoresGrupo, getColoresGrupoById, GetColoresGrupoForUsers
 }

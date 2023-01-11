@@ -98,7 +98,8 @@ const DeleteColoresParticipante = async (req, res) => {
     const id_torneo = req.params.id_torneo;
 
     try {
-        const result = await db.query('DELETE from participantescolores WHERE user_id = $1 AND id_torneo = $2 RETURNING *', [
+        const result = await db.query(`DELETE from participantescolores 
+        WHERE user_id = $1 AND id_torneo = $2 RETURNING *`, [
             id_Pareja, id_torneo
         ]);
         res.json(result.rows[0]);
@@ -335,8 +336,9 @@ const MakeColoresInscripcion = async (req, res) => {
         RETURNING * `, 
         [id_torneo, user_id]);
         //console.log("RESULT : " + JSON.stringify(result.rows));
-        res.json(result.rows);
+        res.json({result: result.rows, success: true});
     } catch (error) {
+        res.json({success: false, result: error.message});
         console.log(error.message);
     }
 }

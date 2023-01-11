@@ -34,6 +34,6 @@ router.delete('/api/DeleteSubTorneoPareja/:idPareja/:id_subtorneo', DeleteSubTor
 
 
 /* router.delete('/api/DeleteColoresPareja/:idPareja', DeleteColoresPareja)*/
-router.delete('/api/DeleteColoresPareja/:idPareja/:id_torneo', DeleteColoresParticipante)
+router.delete('/api/DeleteColoresParticipante/:idPareja/:id_torneo', DeleteColoresParticipante)
 
 module.exports = router;

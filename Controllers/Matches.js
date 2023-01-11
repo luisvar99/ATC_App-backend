@@ -225,10 +225,12 @@ const DeleteColoresEnfrentamiento = async (req, res) => {
 }
 
 const editColoresMatch = async (req, res) => {
-
+    console.log(req.body);
     const id_partido = req.params.id_partido
-    const id_pareja_one = req.body.id_pareja_one
-    const id_pareja_two = req.body.id_pareja_two
+    const id_player_one = req.body.id_player_one
+    const id_player_two = req.body.id_player_two
+    const id_player_three = req.body.id_player_three
+    const id_player_four = req.body.id_player_four
     const fecha = req.body.fecha
     const resultado = req.body.resultado
     const id_ronda = req.body.id_ronda
@@ -236,13 +238,14 @@ const editColoresMatch = async (req, res) => {
     const id_cancha = req.body.id_cancha
 
     try {
-        const result = await db.query(`UPDATE partidocolores SET id_pareja_one = $1, id_pareja_two = $2, fecha = $3, resultado = $4, id_ronda = $5, id_horario = $6, id_cancha = $7
-        WHERE id_partido = $8 RETURNING *`, [
-            id_pareja_one, id_pareja_two,fecha, resultado, id_ronda, id_hora, id_cancha, id_partido
+        const result = await db.query(`UPDATE partidocolores SET player_one = $1, player_two = $2, player_three = $3, player_four = $4, fecha = $5, resultado = $6, id_ronda = $7, id_horario = $8, id_cancha = $9
+        WHERE id_partido = $10 RETURNING *`, [
+            id_player_one, id_player_two, id_player_three, id_player_four, fecha, resultado, id_ronda, id_hora, id_cancha, id_partido
         ]);
-        res.json(result.rows)
+        res.json({result: result.rows, success: true})
     } catch (error) {
         console.log(error.message);
+        res.json({success: false})
     }
 }
 
