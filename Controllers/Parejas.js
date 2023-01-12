@@ -167,7 +167,7 @@ const getColoresParticipantes = async (req, res) => {
     const id_torneo = req.params.id_torneo;
     //console.log("id_torneo : " + id_torneo);
     try {
-        const result = await db.query(`SELECT u.id, u.nombres, u.apellidos, u.accion 
+        const result = await db.query(`SELECT u.id, u.nombres, u.apellidos, u.accion, u.categoria
         FROM participantescolores pc
         JOIN users u ON u.id = pc.user_id
         WHERE id_torneo = $1 ORDER BY u.apellidos` , 

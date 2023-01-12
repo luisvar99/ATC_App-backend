@@ -60,13 +60,14 @@ const GetSubtorneoMatchesById = async (req, res) => {
 
     try {
         const result = await db.query(`select u.nombres, u.apellidos, part.id_partido, part.fecha, 
-        part.id_horario, u.accion, rnd.nombre, u.accion, tor.modalidad
+        part.id_horario, u.accion, rnd.nombre, u.accion, tor.modalidad, can.nombre_cancha
         from users u
         JOIN partido part on part.id_player_uno = u.id or part.id_player_dos = u.id or 
         part.id_player_tres = u.id or part.id_player_cuatro = u.id 
         JOIN rondas rnd on rnd.id_ronda = part.id_ronda
         JOIN subtorneos subtor on subtor.id_subtorneo = part.id_subtorneo
 		JOIN torneos tor on tor.id_torneo = subtor.id_torneo
+        JOIN canchas can ON can.id_cancha = part.id_cancha
         WHERE id_partido = $1
         Order by id_partido`,
         [idPartido]
