@@ -68,9 +68,24 @@ const DeleteSubTorneoPareja = async (req, res) => {
     const id_subtorneo = req.params.id_subtorneo;
 
     try {
+        const resultt = await db.query(`SELECT id_user_one, id_user_two FROM parejas 
+        WHERE id_Pareja = $1 AND id_subtorneo = $2 `, [
+            id_Pareja, id_subtorneo
+        ]);
+        console.log(resultt.rows);
+
+        const player_uno = resultt.rows[0].id_user_one
+        const player_dos = resultt.rows[0].id_user_two
+
         const result = await db.query('DELETE from parejas WHERE id_Pareja = $1 AND id_subtorneo = $2 RETURNING *', [
             id_Pareja, id_subtorneo
         ]);
+
+        const resultThree = await db.query(`DELETE from participantestorneo 
+        WHERE user_id = $1 OR user_id = $2 `, [
+            player_uno, player_dos
+        ]);
+        
         res.json(result.rows[0]);
     } catch (error) {
         console.log(error.message);

@@ -163,8 +163,7 @@ const GetGruposMembers = async (req, res) => {
         //console.log("RESULT : " + result);
         res.json(result.rows);
     } catch (error) {
-        console.log(error.message);
-    }finally{
+        console.log("GetGruposMembers: " + error.message);
     }
 }
 const GetGruposById = async (req, res) => {

@@ -2,7 +2,7 @@ const {Router} = require('express')
 const {addMatch, GetSubtorneoMatchesById, GetSubtorneoMatches, 
     UpdateHorario, DeleteMatch, GetColoresMatches, addColoresMatch,
     GetColoresEnfretamientosPlayers, DeleteColoresEnfrentamiento,
-    GetColoresMatchById, editColoresMatch
+    GetColoresMatchById, editColoresMatch, UpdateSubtorneoMatch
 } = require('../Controllers/Matches')
 
 const router = new Router();
@@ -18,6 +18,7 @@ router.get('/api/GetColoresMatchById/:id_torneo/:id_partido', GetColoresMatchByI
 
 router.put('/api/editHorario/:idHorario', UpdateHorario)
 router.put('/api/editColoresMatch/:id_partido', editColoresMatch)
+router.put('/api/UpdateSubtorneoMatch/:id_partido', UpdateSubtorneoMatch)
 
 router.delete('/api/DeleteMatch/:idMatch', DeleteMatch)
 router.delete('/api/DeleteColoresEnfrentamiento/:id_partido/:id_cancha/:id_horario/:fecha', DeleteColoresEnfrentamiento)

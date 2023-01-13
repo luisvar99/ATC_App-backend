@@ -60,7 +60,8 @@ const GetSubtorneoMatchesById = async (req, res) => {
 
     try {
         const result = await db.query(`select u.nombres, u.apellidos, part.id_partido, part.fecha, 
-        part.id_horario, u.accion, rnd.nombre, u.accion, tor.modalidad, can.nombre_cancha
+        part.id_horario, u.accion, rnd.nombre, u.accion, tor.modalidad, can.nombre_cancha,
+        rnd.id_ronda, can.id_cancha, part.resultado, u.id
         from users u
         JOIN partido part on part.id_player_uno = u.id or part.id_player_dos = u.id or 
         part.id_player_tres = u.id or part.id_player_cuatro = u.id 
@@ -75,7 +76,7 @@ const GetSubtorneoMatchesById = async (req, res) => {
         //console.log("RESULT : " + JSON.stringify(result));
         res.json(result.rows);
     } catch (error) {
-        console.log(error.message);
+        console.log("GetSubtorneoMatchesById: " + error.message);
     }
 }
 
@@ -92,6 +93,7 @@ const GetSubtorneoMatches = async (req, res) => {
         console.log(error.message);
     }
 }
+
 
 
 // --------------------------- QUERIES CON TONREO COLORES ---------------------------
@@ -250,10 +252,36 @@ const editColoresMatch = async (req, res) => {
     }
 }
 
+const UpdateSubtorneoMatch = async (req, res) => {
+    console.log(req.body.id_player_uno);
+    const id_partido = req.params.id_partido
+
+    const id_player_one = req.body.id_player_uno
+    const id_player_two = req.body.id_player_dos
+    const id_player_three = req.body.id_player_tres
+    const id_player_four = req.body.id_player_cuatro
+    const fecha = req.body.fecha
+    const resultado = req.body.resultado
+    const id_ronda = req.body.ronda
+    const id_hora = req.body.hora
+    const id_cancha = req.body.id_cancha
+
+    try {
+        const result = await db.query(`UPDATE partido SET id_player_uno = $1, id_player_dos = $2, id_player_tres = $3, id_player_cuatro = $4, resultado = $5, fecha = $6,  id_ronda = $7, id_horario = $8, id_cancha = $9
+        WHERE id_partido = $10 RETURNING *`, [
+            id_player_one, id_player_two, id_player_three, id_player_four, resultado, fecha,  id_ronda, id_hora, id_cancha, id_partido
+        ]);
+        res.json({result: result.rows, success: true})
+    } catch (error) {
+        console.log(error.message);
+        res.json({success: false})
+    }
+}
+
 module.exports = {
     addMatch, GetSubtorneoMatchesById, 
     GetSubtorneoMatches, UpdateHorario, 
     DeleteMatch, GetColoresMatches, addColoresMatch,
     GetColoresEnfretamientosPlayers,DeleteColoresEnfrentamiento,
-    GetColoresMatchById, editColoresMatch
+    GetColoresMatchById, editColoresMatch, UpdateSubtorneoMatch
 }
