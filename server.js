@@ -56,8 +56,10 @@ app.use(ReservacionesRoute)
 app.use(MatchesRoute)
 app.use(RondasRoute)
 
-app.get('/', (req, res) => {
-    res.json("EPALE")
+app.get('/', async (req, res) => {
+    const result = await db.query('SELECT * FROM canchas order by nombre_cancha');
+        //console.log("RESULT : " + JSON.stringify(result));
+        res.json(result.rows);
 })
 
 app.get('/api/getAllCanchas', async (req, res) => {
