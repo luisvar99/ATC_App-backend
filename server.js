@@ -55,7 +55,7 @@ app.use(MatchesRoute)
 app.use(RondasRoute)
 
 app.get('/', (req, res) => {
-    res.json("Hello")
+    res.json("EPALE")
 })
 
 const PORT = process.env.PORT || 4000
