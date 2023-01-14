@@ -57,9 +57,13 @@ app.use(MatchesRoute)
 app.use(RondasRoute)
 
 app.get('/', async (req, res) => {
-    const result = await db.query('SELECT * FROM canchas order by nombre_cancha');
-        //console.log("RESULT : " + JSON.stringify(result));
+    try {
+        const result = await db.query('SELECT * FROM canchas order by nombre_cancha');
         res.json(result.rows);
+    } catch (error) {
+        res.json({error: error.message})
+    }
+        //console.log("RESULT : " + JSON.stringify(result));
 })
 
 app.get('/api/getAllCanchas', async (req, res) => {
