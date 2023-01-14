@@ -12,7 +12,7 @@ const HorariosRoute = require('./Routes/Horarios')
 const ReservacionesRoute = require('./Routes/Reservaciones')
 const MatchesRoute = require('./Routes/Matches')
 const RondasRoute = require('./Routes/Rondas')
-const {db} = require('../database');
+const {db} = require('./database');
 
 
 const session = require('express-session')
