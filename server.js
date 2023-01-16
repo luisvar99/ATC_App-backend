@@ -12,6 +12,7 @@ const HorariosRoute = require('./Routes/Horarios')
 const ReservacionesRoute = require('./Routes/Reservaciones')
 const MatchesRoute = require('./Routes/Matches')
 const RondasRoute = require('./Routes/Rondas')
+const JornadasRoute = require('./Routes/Jornadas')
 const {db} = require('./database');
 
 
@@ -55,6 +56,7 @@ app.use(HorariosRoute)
 app.use(ReservacionesRoute)
 app.use(MatchesRoute)
 app.use(RondasRoute)
+app.use(JornadasRoute)
 
 app.get('/', async (req, res) => {
     try {

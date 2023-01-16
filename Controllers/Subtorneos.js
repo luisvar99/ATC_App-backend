@@ -5,10 +5,11 @@ const addSubTorneo = async (req, res) => {
     const id_torneo = req.body.id_torneo
     const name = req.body.nombre
     const cantidad_personas = req.body.cantidad_personas
+    const categoria = req.body.categoria
 
     try {
-        const result = await db.query('INSERT INTO subtorneos(id_torneo,nombre,cantidad_personas ) VALUES ($1,$2,$3) RETURNING *', [
-            id_torneo,  name, cantidad_personas,
+        const result = await db.query('INSERT INTO subtorneos(id_torneo,nombre,cantidad_personas, categoria ) VALUES ($1,$2,$3,$4) RETURNING *', [
+            id_torneo,  name, cantidad_personas,categoria
         ]);
         //res.json(result.rows);
         res.json({success: true});	
@@ -24,11 +25,12 @@ const UpdateSubTorneo = async (req, res) => {
     const id_torneo = req.body.id_torneo
     const name = req.body.nombre
     const cantidad_personas = req.body.cantidad_personas
+    const categoria = req.body.categoria
     const id_SubTorneo = req.params.idSubTorneo
 
     try {
-        const result = await db.query('UPDATE subtorneos SET id_torneo=$1, nombre=$2, cantidad_personas=$3 WHERE id_SubTorneo=$4 RETURNING *', [
-            id_torneo, name, cantidad_personas, id_SubTorneo
+        const result = await db.query('UPDATE subtorneos SET id_torneo=$1, nombre=$2, cantidad_personas=$3, categoria = $4 WHERE id_SubTorneo=$5 RETURNING *', [
+            id_torneo, name, cantidad_personas, categoria, id_SubTorneo
         ]);
         //console.log(result);
         res.json(result.rows);
@@ -98,7 +100,8 @@ const GetSingleSubTorneo = async (req, res) => {
     const id = req.params.idSubTorneo;
     //console.log("GetSingleSubTorneo " + id);
     try {
-        const result = await db.query(`SELECT subt.nombre, subt.cantidad_personas, subt.id_torneo, tor.modalidad 
+        const result = await db.query(`SELECT subt.nombre, subt.cantidad_personas, 
+        subt.id_torneo, tor.modalidad, subt.categoria
         FROM subtorneos subt
         JOIN torneos tor on tor.id_torneo = subt.id_torneo
         WHERE id_subtorneo = $1` , 
