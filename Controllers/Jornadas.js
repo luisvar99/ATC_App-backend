@@ -19,17 +19,37 @@ const AddJornada = async (req, res) => {
     }
 }
 const UpdateJornada = async (req, res) => {
-    
-    const nombre_ronda = req.body.nombre_ronda;
-    const id_ronda = req.params.id_ronda;
+    const equipo_uno = req.body.equipo_uno;
+    const equipo_dos = req.body.equipo_dos;
+    const id_ronda = req.body.id_ronda;
+    const fecha = req.body.fecha;
+    const id_jornada = req.params.id_jornada;
+    console.log(fecha);
 
     try {
-        const result = await db.query('UPDATE jornadascolores set nombre=$1 WHERE id_ronda = $2 RETURNING *', [
-            nombre_ronda, id_ronda 
+        const result = await db.query(`UPDATE jornadascolores set equipo_uno=$1, equipo_dos=$2, fecha=$3, id_ronda=$4 
+        WHERE id_jornada = $5 RETURNING *`, [
+            equipo_uno, equipo_dos, fecha, id_ronda,id_jornada 
         ]);
         res.json({success:true, result: result.rows[0]});
     } catch (error) {
         console.log(error.message);
+    }
+}
+const PublishJornadas = async (req, res) => {
+    console.log(req.params.id_torneo);
+    const ispublicado = req.body.ispublicado;
+    const id_torneo = req.params.id_torneo;
+
+    try {
+        const result = await db.query(`UPDATE jornadascolores set ispublicado=$1 
+        WHERE id_torneo = $2 RETURNING *`, [
+            ispublicado,id_torneo 
+        ]);
+        res.json({success:true});
+    } catch (error) {
+        console.log(error.message);
+        res.json({success:false});
     }
 }
 
@@ -59,6 +79,19 @@ const getJornadas = async (req, res) => {
     }
 }
 
+const getJornadasForUsers = async (req, res) => {
+    try {
+        const result = await db.query(`SELECT * FROM jornadascolores j
+        JOIN rondas r ON r.id_ronda = j.id_ronda 
+        WHERE j.ispublicado=1
+        order by j.fecha`);
+        console.log("getJornadas : " + JSON.stringify(result.rows));
+        res.json(result.rows);
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 const getJornadaById = async (req, res) => {
     const id_jornada = req.params.id_jornada;
     //console.log(JSON.stringify(id));
@@ -76,5 +109,6 @@ const getJornadaById = async (req, res) => {
 module.exports = {
     AddJornada, 
     getJornadaById, UpdateJornada, 
-    DeleteJornada, getJornadas
+    DeleteJornada, getJornadas,
+    PublishJornadas, getJornadasForUsers
 }
