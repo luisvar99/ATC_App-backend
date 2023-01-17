@@ -60,8 +60,8 @@ app.use(JornadasRoute)
 
 app.get('/', async (req, res) => {
     try {
-        const result = await db.query('SELECT * FROM canchas order by nombre_cancha');
-        res.json(result.rows);
+        //const result = await db.query('SELECT * FROM canchas order by nombre_cancha');
+        res.json("Conectado a Backend");
     } catch (error) {
         res.json({error: error.message})
     }
