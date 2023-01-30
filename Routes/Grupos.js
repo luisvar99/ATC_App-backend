@@ -14,7 +14,7 @@ const router = new Router();
 router.get('/api/getAllGrupos', GetAllGrupos)
 router.get('/api/getSubtorneoGrupos/:idSubtorneo', getSubtorneoGrupos)
 router.get('/api/getGruposMembers/:idSubtorneo', GetGruposMembers)
-router.get('/api/GetGruposById/:idGrupo', GetGruposById)
+router.get('/api/GetGruposById/:idGrupo/:id_subtorneo', GetGruposById)
 router.get('/api/GetColoresGrupo/:id_torneo', GetColoresGrupo)
 router.get('/api/GetColoresGrupoForUsers/:id_torneo', GetColoresGrupoForUsers)
 router.get('/api/GetColoresTeamsByGroup/:id_bombo', GetColoresTeamsByGroup)

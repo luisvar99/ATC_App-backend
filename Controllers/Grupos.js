@@ -51,8 +51,8 @@ const addGrupoMember = async (req, res) => {
             res.json({success:false, error: 1});
 
         }else{
-            const result = await db.query('INSERT INTO participantesgrupo (id_grupo, user_id) VALUES ($1,$2) RETURNING *', [
-                id_grupo, user_id
+            const result = await db.query('INSERT INTO participantesgrupo (id_grupo, user_id, id_subtorneo) VALUES ($1,$2, $3) RETURNING *', [
+                id_grupo, user_id, idSubtorneo
             ]);
             res.json({success:true, result: result});
         }
@@ -85,7 +85,7 @@ const PublishGrupos = async (req, res) => {
 
     try {
         const result = await db.query('UPDATE subtorneogrupos set "isPublicado"=$1 WHERE id_Subtorneo = $2 RETURNING *', [
-            isPublicado,  isPublicado
+            isPublicado,  idSubtorneo
         ]);
         res.json(result.rows);
     } catch (error) {
@@ -150,16 +150,16 @@ const GetGruposMembers = async (req, res) => {
     try {
         const result = await db.query(`select u.accion, u.nombres, u.apellidos, u.id, u.username, 
         subt.nombre, tor.nombre_torneo, subgrupo.numero_grupo, part.id_grupo, subgrupo."isPublicado", 
-        par.id_pareja
+        par.id_pareja, subgrupo.numero_grupo
         from users u
         JOIN participantesgrupo part on part.user_id = u.id
         JOIN subtorneogrupos subgrupo on subgrupo.id_grupo = part.id_grupo
         JOIN subtorneos subt on subt.id_subtorneo = subgrupo.id_subtorneo
         JOIN torneos tor on tor.id_torneo = subt.id_torneo
         JOIN parejas par on par.id_user_one = u.id or par.id_user_two = u.id
-        WHERE subgrupo.id_subtorneo = $1 
+        WHERE part.id_subtorneo = $1 AND par.id_subtorneo = $2
         ORDER BY subgrupo.numero_grupo, par.id_pareja`  , 
-        [idSubTorneo]);
+        [idSubTorneo, idSubTorneo]);
         //console.log("RESULT : " + result);
         res.json(result.rows);
     } catch (error) {
@@ -168,6 +168,8 @@ const GetGruposMembers = async (req, res) => {
 }
 const GetGruposById = async (req, res) => {
     const idGrupo = req.params.idGrupo;
+    const id_subtorneo = req.params.id_subtorneo;
+    //console.log("GetGruposById: " + id_subtorneo);
     try {
         const result = await db.query(`select u.accion, u.nombres, u.apellidos, u.id, u.username, 
         subt.nombre, tor.nombre_torneo, subgrupo.numero_grupo, part.id_grupo, subgrupo."isPublicado", 
@@ -178,9 +180,9 @@ const GetGruposById = async (req, res) => {
         JOIN subtorneos subt on subt.id_subtorneo = subgrupo.id_subtorneo
         JOIN torneos tor on tor.id_torneo = subt.id_torneo
         JOIN parejas par on par.id_user_one = u.id or par.id_user_two = u.id
-        WHERE subgrupo.id_grupo = $1 
+        WHERE subgrupo.id_grupo = $1 AND par.id_subtorneo = $2
         ORDER BY subgrupo.numero_grupo, par.id_pareja`  , 
-        [idGrupo]);
+        [idGrupo, id_subtorneo]);
         //console.log("RESULT : " + result);
         res.json(result.rows);
     } catch (error) {

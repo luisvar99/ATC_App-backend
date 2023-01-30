@@ -1,7 +1,7 @@
 const {db} = require('../database');
 
 const addReservacion = async (req, res) => {
-    console.log("Creando reservacion");
+    //console.log("Creando reservacion");
     console.log(req.body);
     const idCancha = req.body.idCancha 
     const idHorario = req.body.idHorario
@@ -20,12 +20,24 @@ const addReservacion = async (req, res) => {
         ]);
 
         if(checkReservation.rowCount>=2){
+            console.log("checkReservation.rowCount: " + checkReservation.rowCount);
             res.json({validReservation: false, success: false});
         }else{
-            const result = await db.query('INSERT INTO reserva (id_cancha, id_horario, id_socio, fecha, id_invitado_uno, id_invitado_dos, descripcion) VALUES ($1,$2,$3, $4, $5, $6, $7) RETURNING *', [
-                idCancha,  idHorario, idSocio, fecha, id_inv_uno, id_inv_dos, descripcion
+            const checkHorarioDisponible = await db.query(`SELECT * FROM reserva
+            WHERE fecha = $1 AND id_horario = $2 AND id_cancha = $3`, [
+                fecha, idHorario, idCancha
             ]);
-            res.json(result.rows[0]);
+
+            if(checkHorarioDisponible.rowCount>0){
+                console.log("checkHorarioDisponible.rowCount: " + checkHorarioDisponible.rowCount);
+                res.json({validHorario: false, success: false});
+            }else{
+                console.log("Insertanto Reserva");
+                const result = await db.query('INSERT INTO reserva (id_cancha, id_horario, id_socio, fecha, id_invitado_uno, id_invitado_dos, descripcion) VALUES ($1,$2,$3, $4, $5, $6, $7) RETURNING *', [
+                    idCancha,  idHorario, idSocio, fecha, id_inv_uno, id_inv_dos, descripcion
+                ]);
+                res.json(result.rows[0]);
+            }
         }
 
     } catch (error) {
