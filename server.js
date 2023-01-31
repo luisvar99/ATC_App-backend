@@ -22,7 +22,7 @@ require('dotenv').config();
 const app = express();
 const corsOptions ={
     //origin: 'http://localhost:3000' ,
-    origin: ['http://localhost:3000', 'https://63d994027371620009cffa57--eloquent-kataifi-0580d4.netlify.app'],
+    origin: ['http://localhost:3000', 'https://63d99d54a535a90008295566--eloquent-kataifi-0580d4.netlify.app'],
     credentials:true,            //access-control-allow-credentials:true
     optionSuccessStatus:200
 }
