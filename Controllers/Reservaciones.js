@@ -30,6 +30,7 @@ const addReservacion = async (req, res) => {
 
             if(checkHorarioDisponible.rowCount>0){
                 console.log("checkHorarioDisponible.rowCount: " + checkHorarioDisponible.rowCount);
+                console.log("Horario no disponible");
                 res.json({validHorario: false, success: false});
             }else{
                 console.log("Insertanto Reserva");
