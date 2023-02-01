@@ -49,7 +49,10 @@ const getAllrondas = async (req, res) => {
         res.json(result.rows);
     } catch (error) {
         console.log(error.message);
-    }
+    }finally{
+        await db.release();
+        await db.close()
+    }  
 }
 
 const GetRondasById = async (req, res) => {
