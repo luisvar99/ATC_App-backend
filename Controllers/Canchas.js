@@ -11,8 +11,9 @@ const addCancha = async (req, res) => {
         const result = await db.query('INSERT INTO canchas (nombre_cancha, id_categoriacancha,estatus_cancha) VALUES ($1,$2,$3) RETURNING *', [
             name,  category, status
         ]);
-        res.json(result.rows[0]);
+        res.json({result : result.rows[0], success: true});
     } catch (error) {
+        res.json({result : result.rows[0], success: false});
         console.log(error.message);
     }
 }
@@ -27,8 +28,9 @@ const UpdateCancha = async (req, res) => {
         const result = await db.query('UPDATE canchas set nombre_cancha=$1, id_categoriacancha=$2, estatus_cancha=$3 WHERE id_cancha = $4 RETURNING *', [
             name,  category, status, id_cancha
         ]);
-        res.json(result.rows);
+        res.json({result : result.rows, success: true});
     } catch (error) {
+        res.json({result : result.rows, success: true});
         console.log(error.message);
     }
 }
