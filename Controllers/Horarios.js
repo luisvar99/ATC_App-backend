@@ -61,8 +61,6 @@ const GetAllHorarios = async (req, res) => {
         
     } catch (error) {
         console.log(error.message);
-    }finally{
-        client.end();
     }
 }
 
