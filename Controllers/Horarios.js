@@ -53,12 +53,16 @@ const DeleteHorario = async (req, res) => {
 }
 
 const GetAllHorarios = async (req, res) => {
+    const client =  await db.connect()
     try {
         const result = await db.query('SELECT * FROM horarioscancha order by inicio');
         //console.log("RESULT : " + JSON.stringify(result));
         res.json(result.rows);
+        
     } catch (error) {
         console.log(error.message);
+    }finally{
+        client.end();
     }
 }
 

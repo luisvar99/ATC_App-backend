@@ -242,7 +242,8 @@ const CreateColoresEquipo = async (req, res) => {
 }
 
 const GetColoresGrupo = async (req, res) => {
-    const id_torneo = req.params.id_torneo 
+    const id_torneo = req.params.id_torneo
+    const client = await db.connect()
     //console.log("id_torneo" + id_torneo);
     try {
         const result = await db.query(`SELECT * FROM bomboscolores WHERE id_torneo = $1 ORDER BY nombre_bombo`, [
@@ -252,7 +253,9 @@ const GetColoresGrupo = async (req, res) => {
         } catch (error) {
             res.json({success: 'Failed', error: error.message});
             console.log(error.message);
-    }
+    }finally{
+        await client.close()
+    }  
 }
 
 const GetColoresGrupoForUsers = async (req, res) => {
@@ -292,6 +295,7 @@ const GetColoresTeamsByGroup = async (req, res) => {
 
 const GetEquiposColores = async (req, res) => {
     const id_torneo = req.params.id_torneo 
+    const client = await db.connect()
     try {
         const result = await db.query(`SELECT * from equiposcolores 
         WHERE id_torneo = $1 `, [
@@ -302,7 +306,9 @@ const GetEquiposColores = async (req, res) => {
     } catch (error) {
         res.json({success: 'Failed', error: error.message});
         console.log(error.message);
-    }    
+    }finally{
+        await client.close()
+    }          
 }
 
 const getColoresEquipoById = async (req, res) => {

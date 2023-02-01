@@ -42,14 +42,18 @@ const DeleteRondas = async (req, res) => {
     }
 }
 
+
 const getAllrondas = async (req, res) => {
+    const client = await db.connect()
     try {
         const result = await db.query('SELECT * FROM rondas order by nombre');
         //console.log("Rondas : " + JSON.stringify(result));
         res.json(result.rows);
     } catch (error) {
         console.log(error.message);
-    }
+    }finally{
+        await client.close()
+    }  
 }
 
 const GetRondasById = async (req, res) => {
