@@ -252,10 +252,7 @@ const GetColoresGrupo = async (req, res) => {
         } catch (error) {
             res.json({success: 'Failed', error: error.message});
             console.log(error.message);
-    }finally{
-        await db.release();
-        await db.close()
-    }     
+    }
 }
 
 const GetColoresGrupoForUsers = async (req, res) => {
@@ -305,10 +302,7 @@ const GetEquiposColores = async (req, res) => {
     } catch (error) {
         res.json({success: 'Failed', error: error.message});
         console.log(error.message);
-    }finally{
-        await db.release();
-        await db.close()
-    }          
+    }    
 }
 
 const getColoresEquipoById = async (req, res) => {

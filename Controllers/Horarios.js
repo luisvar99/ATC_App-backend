@@ -59,10 +59,7 @@ const GetAllHorarios = async (req, res) => {
         res.json(result.rows);
     } catch (error) {
         console.log(error.message);
-    }finally{
-        await db.release();
-        await db.close()
-    }  
+    }
 }
 
 const GetHorarioById = async (req, res) => {
