@@ -8,8 +8,9 @@ const addRondas = async (req, res) => {
         const result = await db.query('INSERT INTO rondas (nombre) VALUES ($1) RETURNING *', [
             nombre_ronda,  
         ]);
-        res.json(result.rows[0]);
+        res.json({result: result.rows[0], success:true});
     } catch (error) {
+        res.json({result: result.rows[0], success:false});
         console.log(error.message);
     }
 }
@@ -22,8 +23,9 @@ const UpdateRondas = async (req, res) => {
         const result = await db.query('UPDATE rondas set nombre=$1 WHERE id_ronda = $2 RETURNING *', [
             nombre_ronda, id_ronda 
         ]);
-        res.json({success:true, result: result.rows[0]});
+        res.json({result: result.rows[0], success:true});
     } catch (error) {
+        res.json({result: result.rows[0], success:false});
         console.log(error.message);
     }
 }
@@ -36,8 +38,9 @@ const DeleteRondas = async (req, res) => {
         const result = await db.query('DELETE from rondas WHERE id_ronda = $1 RETURNING *', [
             id_ronda
         ]);
-        res.json(result.rows[0]);
+        res.json({result: result.rows[0], success:true});
     } catch (error) {
+        res.json({result: result.rows[0], success:false});
         console.log(error.message);
     }
 }

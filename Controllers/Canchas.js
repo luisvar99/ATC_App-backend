@@ -43,8 +43,9 @@ const DeleteCancha = async (req, res) => {
         const result = await db.query('DELETE from canchas WHERE id_cancha = $1 RETURNING *', [
             id_cancha
         ]);
-        res.json(result.rows[0]);
+        res.json({result : result.rows, success: true});
     } catch (error) {
+        res.json({result : result.rows, success: false});
         console.log(error.message);
     }
 }

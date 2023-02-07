@@ -87,8 +87,9 @@ const PublishGrupos = async (req, res) => {
         const result = await db.query('UPDATE subtorneogrupos set "isPublicado"=$1 WHERE id_Subtorneo = $2 RETURNING *', [
             isPublicado,  idSubtorneo
         ]);
-        res.json(result.rows);
+        res.json({result: result.rows, success: true});
     } catch (error) {
+        res.json({result: result.rows, success: true});
         console.log(error.message);
     }
 }
@@ -116,8 +117,9 @@ const DeleteSubTorneoGroupParticipant = async (req, res) => {
         const result = await db.query('DELETE from participantesgrupo WHERE id_grupo = $1 AND user_id = $2 RETURNING *', [
             idGrupo, idUser
         ]);
-        res.json(result.rows[0]);
+        res.json({result: result.rows[0], success: true});
     } catch (error) {
+        res.json({result: result.rows[0], success: false});
         console.log(error.message);
     }
 }

@@ -58,8 +58,9 @@ const UpdateUser = async (req, res) => {
         WHERE id = $11 RETURNING *`, [
             username, nombres, apellidos,cedula , accion,fecha_nacimiento , correo_electronico,sexo, rol, categoria, user_id
         ]);
-        res.json(result.rows);
+        res.json({success: true});
     } catch (error) {
+        res.json({success: false});
         console.log(error.message);
     }
 }
@@ -72,8 +73,9 @@ const DeleteUser = async (req, res) => {
         const result = await db.query('DELETE from users WHERE id = $1 RETURNING *', [
             id_user
         ]);
-        res.json(result.rows[0]);
+        res.json({success: true});
     } catch (error) {
+        res.json({success: false});
         console.log(error.message);
     }
 }

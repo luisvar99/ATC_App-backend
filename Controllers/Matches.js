@@ -48,8 +48,9 @@ const DeleteMatch = async (req, res) => {
         const result = await db.query('DELETE from partido WHERE id_partido = $1 RETURNING *', [
             id_Match
         ]);
-        res.json(result.rows[0]);
+        res.json({result: result.rows[0], success: true});
     } catch (error) {
+        res.json({result: result.rows[0], success: false});
         console.log(error.message);
     }
 }
@@ -274,7 +275,7 @@ const UpdateSubtorneoMatch = async (req, res) => {
         res.json({result: result.rows, success: true})
     } catch (error) {
         console.log(error.message);
-        res.json({success: false})
+        res.json({result: result.rows[0], success: false});
     }
 }
 

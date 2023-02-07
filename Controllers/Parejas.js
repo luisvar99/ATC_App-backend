@@ -86,8 +86,9 @@ const DeleteSubTorneoPareja = async (req, res) => {
             player_uno, player_dos
         ]);
         
-        res.json(result.rows[0]);
+        res.json({result: result.rows[0], success: true});
     } catch (error) {
+        res.json({result: result.rows[0], success: false});
         console.log(error.message);
     }
 }

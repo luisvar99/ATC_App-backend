@@ -44,11 +44,9 @@ const UpdateTorneo = async (req, res) => {
         const result = await db.query('UPDATE torneos SET nombre_torneo=$1, fecha_inicio=$2, fecha_fin=$3, fecha_inicio_inscripcion=$4, fecha_fin_inscripcion=$5, id_categoria=$6, descripcion=$7, modalidad=$8, is_colores =$9 WHERE id_torneo=$10 RETURNING *', [
             name,  fecha_inicio, fecha_fin, fecha_inicio_inscripcion,fecha_fin_inscripcion, id_categoria, descripcion, modalidad , is_colores, id_torneo
         ]);
-        //console.log(result);
-        res.json(result.rows);
-        //res.json({success: true});
+        res.json({ resutlt: result.rows[0], success: true });
     } catch (error) {
-        res.json({success: error.message});
+        res.json({ resutlt: result.rows[0], success: false });
         console.log(error.message);
     }
 }
@@ -61,8 +59,9 @@ const DeleteTorneo = async (req, res) => {
         const result = await db.query('DELETE from torneos WHERE id_torneo = $1 RETURNING *', [
             id_torneo
         ]);
-        res.json(result.rows[0]);
+        res.json({ resutlt: result.rows[0], success: true });
     } catch (error) {
+        res.json({ resutlt: result.rows[0], success: false });
         console.log(error.message);
     }
 }

@@ -16,8 +16,9 @@ const addHorario = async (req, res) => {
         const result = await db.query('INSERT INTO horarioscancha (inicio, fin, hora_inicio ,estatus_horario) VALUES ($1,$2,$3,$4) RETURNING *', [
             inicio,  fin, hora_inicio, estatus_horario
         ]);
-        res.json(result.rows[0]);
+        res.json({success: true});
     } catch (error) {
+        res.json({success: false});
         console.log(error.message);
     }
 }
@@ -32,8 +33,9 @@ const UpdateHorario = async (req, res) => {
         const result = await db.query('UPDATE horarioscancha set nombre_Horario=$1, id_categoriaHorario=$2, estatus_Horario=$3 WHERE id_Horario = $4 RETURNING *', [
             name,  category, status, id_Horario
         ]);
-        res.json(result.rows);
+        res.json({success: true});
     } catch (error) {
+        res.json({success: false});
         console.log(error.message);
     }
 }
@@ -46,8 +48,9 @@ const DeleteHorario = async (req, res) => {
         const result = await db.query('DELETE from horarioscancha WHERE id_Horario = $1 RETURNING *', [
             id_Horario
         ]);
-        res.json(result.rows[0]);
+        res.json({success: true});
     } catch (error) {
+        res.json({success: false});
         console.log(error.message);
     }
 }
