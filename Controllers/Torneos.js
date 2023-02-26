@@ -44,9 +44,9 @@ const UpdateTorneo = async (req, res) => {
         const result = await db.query('UPDATE torneos SET nombre_torneo=$1, fecha_inicio=$2, fecha_fin=$3, fecha_inicio_inscripcion=$4, fecha_fin_inscripcion=$5, id_categoria=$6, descripcion=$7, modalidad=$8, is_colores =$9 WHERE id_torneo=$10 RETURNING *', [
             name,  fecha_inicio, fecha_fin, fecha_inicio_inscripcion,fecha_fin_inscripcion, id_categoria, descripcion, modalidad , is_colores, id_torneo
         ]);
-        res.json({ resutlt: result.rows[0], success: true });
+        res.json({ result: result.rows[0], success: true });
     } catch (error) {
-        res.json({ resutlt: result.rows[0], success: false });
+        res.json({ result: result.rows[0], success: false });
         console.log(error.message);
     }
 }
@@ -96,7 +96,11 @@ const GetTorneoColores = async (req, res) => {
     try {
         const result = await db.query('SELECT * FROM torneos where (fecha_fin > CURRENT_DATE) AND is_colores=true');
         //console.log("RESULT : " + JSON.stringify(result));
-        res.json(result.rows[0]);
+        if(result.rowCount>0){
+            res.json(result.rows[0]);
+        }else{
+            res.json({success:false})
+        }
     } catch (error) {
         console.log(error.message);
     }

@@ -203,9 +203,9 @@ const CreateColoresGrupo = async (req, res) => {
             id_torneo, nombre_bombo])
             
         res.json({success:true, result: result.rows[0]});
-        } catch (error) {
-            res.json({success: 'Failed', error: error.message});
-            console.log(error.message);
+    } catch (error) {
+        res.json({success: false, error: error.message});
+        console.log(error.message);
     }        
 }
 const UpdateColoresGrupo = async (req, res) => {
