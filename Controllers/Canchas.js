@@ -82,7 +82,7 @@ const getAllCanchas = async (req, res) => {
 
 const GetCanchaById = async (req, res) => {
     const id = req.params.idCancha;
-    console.log(JSON.stringify(id));
+    //console.log(JSON.stringify(id));
     try {
         const result = await db.query('SELECT * FROM canchas WHERE id_cancha = $1 ' , 
         [id]);

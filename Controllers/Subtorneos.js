@@ -1,7 +1,7 @@
 const {db} = require('../database');
 
 const addSubTorneo = async (req, res) => {
-    console.log(req.body);
+    //console.log(req.body);
     const id_torneo = req.body.id_torneo
     const name = req.body.nombre
     const cantidad_personas = req.body.cantidad_personas
@@ -55,7 +55,7 @@ const DeleteSubTorneo = async (req, res) => {
 
 const DeleteSubTorneoParticipant = async (req, res) => {
 
-    console.log(req.params);
+    //console.log(req.params);
     const id_SubTorneo = req.params.idSubTorneo;
     const user_id = req.params.user_id;
 
@@ -116,7 +116,7 @@ const GetSubTorneosParticipants = async (req, res) => {
     const id = (req.params.idSubTorneo);
     //console.log(id);
     try {
-        const result = await db.query(`SELECT st.nombre, tor.nombre_torneo, u.username, u.id, pt.id_subtorneo
+        const result = await db.query(`SELECT st.nombre, tor.nombre_torneo, u.username, u.nombres, u.apellidos, u.accion, u.id, pt.id_subtorneo
         FROM subtorneos st
         JOIN participantestorneo pt on pt.id_subtorneo = st.id_subtorneo
         JOIN torneos tor on tor.id_torneo = st.id_torneo

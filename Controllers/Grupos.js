@@ -220,7 +220,7 @@ const UpdateColoresGrupo = async (req, res) => {
             
         res.json({success:true, result: result.rows[0]});
         } catch (error) {
-            res.json({success: 'Failed', error: error.message});
+            res.json({success: false, error: error.message});
             console.log(error.message);
     }        
 }
@@ -364,8 +364,9 @@ const DeleteColoresGrupo = async (req, res) => {
         const result = await db.query('DELETE from bomboscolores WHERE id_bombo = $1 RETURNING *', [
             id_bombo
         ]);
-        res.json({QueryUno: result.rows[0]/* , QueryDos: resultTwo.rows[0] */});
+        res.json({success:true});
     } catch (error) {
+        res.json({success:false});
         console.log(error.message);
     }
 }
@@ -381,8 +382,9 @@ const DeleteColoresEquipo = async (req, res) => {
         WHERE id_equipo = $1 RETURNING *`, [
             id_equipo
         ]);
-        res.json({QueryUno: result.rows[0], QueryDos: deleteResult.rows[0]});
+        res.json({QueryUno: result.rows[0], QueryDos: deleteResult.rows[0], success:true});
     } catch (error) {
+        res.json({success:true});
         console.log(error.message);
     }
 }
@@ -401,8 +403,9 @@ const UpdateColoresEquipo = async (req, res) => {
         WHERE id_equipo = $6 AND id_torneo = $7 RETURNING *`, [
             nombre_equipo, id_bombo, id_torneo, ispublicado, color, id_equipo, id_torneo
         ]);
-        res.json({QueryUno: result.rows[0]});
+        res.json({success: true});
     } catch (error) {
+        res.json({success: false});
         console.log(error.message);
     }
 }

@@ -11,9 +11,9 @@ const addSubtorneoPareja = async (req, res) => {
                 myId, myParejaId, idSubTorneo
             ]);
             
-        res.json({message:"Pareja inscrita", result:result.rows});
+        res.json({message:"Pareja inscrita", result:result.rows, success: true});
     } catch (error) {
-        res.json({success: 'Failed', error: error.message});
+        res.json({success: 'Failed', error: error.message, success: false});
         console.log(error.message);
     }        
 }
@@ -30,6 +30,20 @@ const addParejaMember = async (req, res) => {
         res.json({success: 'Failed', error: error.message});
         console.log(error.message);
     }        
+}
+
+const DesinscripcionPareja = async (req, res) => {
+    const id_subtorneo = req.params.id_subtorneo;
+    const id_pareja = req.params.id_pareja;
+    try {
+        const result = await db.query('DELETE FROM parejas WHERE id_pareja = $1 AND id_subtorneo =$2',[
+            id_pareja, id_subtorneo
+        ]);
+        
+        res.json({success: true});
+    } catch (error) {
+        res.json({success: false});
+    }
 }
 const UpdatePareja = async (req, res) => {
     
@@ -72,7 +86,7 @@ const DeleteSubTorneoPareja = async (req, res) => {
         WHERE id_Pareja = $1 AND id_subtorneo = $2 `, [
             id_Pareja, id_subtorneo
         ]);
-        console.log(resultt.rows);
+        //console.log(resultt.rows);
 
         const player_uno = resultt.rows[0].id_user_one
         const player_dos = resultt.rows[0].id_user_two
@@ -118,8 +132,9 @@ const DeleteColoresParticipante = async (req, res) => {
         WHERE user_id = $1 AND id_torneo = $2 RETURNING *`, [
             id_Pareja, id_torneo
         ]);
-        res.json(result.rows[0]);
+        res.json({result: result.rows[0], success:true});
     } catch (error) {
+        res.json({result: result.rows[0], success:false});
         console.log(error.message);
     }
 }
@@ -136,9 +151,11 @@ const GetAllParejas = async (req, res) => {
 
 const getSubtorneoParejas = async (req, res) => {
     const idSubTorneo = req.params.idSubtorneo;
-    console.log(idSubTorneo);
+    //console.log(idSubTorneo);
     try {
-        const result = await db.query(`SELECT u.id, u.username, u.nombres, u.apellidos, u.accion, st.nombre, p.id_pareja from users u
+        const result = await db.query(`SELECT u.id, u.username, u.nombres, u.apellidos, u.accion, 
+        st.nombre, p.id_pareja, p.id_user_one, p.id_user_two
+        from users u
         JOIN parejas p on p.id_user_one = u.id or p.id_user_two = u.id
         JOIN subtorneos st on st.id_subtorneo = p.id_subtorneo WHERE p.id_subtorneo = $1 
         ORDER BY p.id_pareja` , 
@@ -280,8 +297,9 @@ const SetEquipoToParticipante = async (req, res) => {
         WHERE user_id = $2 AND id_torneo = $3` , 
         [id_equipo, user_id, id_torneo]);
         //console.log("RESULT : " + JSON.stringify(result));
-        res.json(result.rows);
+        res.json({success: true});
     } catch (error) {
+        res.json({success: false});
         console.log(error.message);
     }
 }
@@ -306,7 +324,7 @@ const SetEquipoToParticipante = async (req, res) => {
 
 const getPlayersByTeam = async (req, res) => {
     const id_equipo = req.params.id_equipo;
-    console.log("id_equipo : " + id_equipo);
+    //console.log("id_equipo : " + id_equipo);
 
     try {
         const result = await db.query(`SELECT u.nombres, u.apellidos, u.accion, u.id
@@ -367,5 +385,5 @@ module.exports = {
     /* GetColoresParejas */ getColoresParejasById, /* SetEquipoToPareja, */
     getPlayersByTeam, /* DeleteColoresPareja, */ MakeColoresInscripcion,
     /* GetColoresParejasMoreInfo, */ getColoresParticipantes, DeleteColoresParticipante,
-    SetEquipoToParticipante, GetColoresParticipantesMoreInfo
+    SetEquipoToParticipante, GetColoresParticipantesMoreInfo, DesinscripcionPareja
 }

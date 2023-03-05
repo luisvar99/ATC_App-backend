@@ -4,7 +4,8 @@ const {addSubtorneoPareja, GetAllParejas, getSubtorneoParejas,
     /* GetColoresParejas, */ getColoresParejasById, /* SetEquipoToPareja, */
     getPlayersByTeam, /* DeleteColoresPareja, */ MakeColoresInscripcion,
     /* GetColoresParejasMoreInfo, */ DeleteSubTorneoPareja, getColoresParticipantes,
-    DeleteColoresParticipante, SetEquipoToParticipante, GetColoresParticipantesMoreInfo
+    DeleteColoresParticipante, SetEquipoToParticipante, GetColoresParticipantesMoreInfo,
+    DesinscripcionPareja
 } = require('../Controllers/Parejas')
 
 const router = new Router();
@@ -29,6 +30,7 @@ router.put('/api/editPareja/:idPareja', UpdatePareja)
 /* router.put('/api/SetEquipoToPareja/:id_pareja', SetEquipoToPareja) */
 router.put('/api/SetEquipoToPareja/:user_id/:id_torneo', SetEquipoToParticipante)
 
+router.delete('/api/DesinscripcionPareja/:id_pareja/:id_subtorneo', DesinscripcionPareja)
 router.delete('/api/deletePareja/:idPareja', DeletePareja)
 router.delete('/api/DeleteSubTorneoPareja/:idPareja/:id_subtorneo', DeleteSubTorneoPareja)
 

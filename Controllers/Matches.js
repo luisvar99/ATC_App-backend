@@ -115,7 +115,7 @@ const GetColoresMatches = async (req, res) => {
 const GetColoresEnfretamientosPlayers = async (req, res) => {
     const id_torneo = req.params.id_torneo;
     const id_partido = req.params.id_partido;
-    //console.log("GetSubtorneoMatches " + id);
+    console.log("GetColoresEnfretamientosPlayers " + JSON.stringify(req.params));
     try {
         const result = await db.query(`SELECT u.nombres, u.apellidos, r.nombre, can.nombre_cancha, 
         eq.color, partido.resultado, partido.fecha, u.accion
@@ -140,7 +140,7 @@ const GetColoresMatchById = async (req, res) => {
     const id_partido = req.params.id_partido;
     //console.log("GetSubtorneoMatches " + id);
     try {
-        const result = await db.query(`SELECT partido.id_partido, u.nombres, u.apellidos, 
+        const result = await db.query(`SELECT partido.id_partido, u.nombres, u.apellidos, u.id,
         partido.fecha, r.nombre, partido.resultado, hc.inicio, can.nombre_cancha,
         r.id_ronda, hc.id_horario, can.id_cancha, ec.nombre_equipo, u.accion
         FROM participantescolores pc
@@ -222,8 +222,9 @@ const DeleteColoresEnfrentamiento = async (req, res) => {
             id_cancha, id_horario, fecha
         ]);
 
-        res.json({quno: result.rows, qdos: resultReserva.rows});
+        res.json({quno: result.rows, qdos: resultReserva.rows, success: true});
     } catch (error) {
+        res.json({success: false});
         console.log(error.message);
     }
 }
